@@ -1,0 +1,1938 @@
+{
+    "alien": {
+        "objects": {
+            "score_item_position": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies_killable": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "kill_item_position": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "amidar": {
+        "objects": {
+            "completed_rectangles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "walked_on_paths": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_gorilla": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_paint_roller": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "paths": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "asterix": {
+        "objects": {
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "collectibles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "asteroids": {
+        "objects": {
+            "asteroids": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "missiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "atlantis": {
+        "objects": {
+            "installations_alive": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fire_cooldown": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bullet": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "plasma": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "command_post_alive": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "bankheist": {
+        "objects": {
+            "fuel": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fuel_refill": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "banks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "dynamite": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "beamrider": {
+        "objects": {
+            "shooting_delay": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "coins": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "white_ufo_left": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "mothership": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "white_ufo_pattern_timer": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rejuvenator_dead": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "shot_type_pending": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "white_ufo_pattern_id": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "shooting_cd": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "torpedoes_left": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy_shots": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "standby_phase": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "falling_rocks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "kamikaze": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "sector": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bullet_type": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "chasing_meteoroids": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bouncer": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "mothership_timer": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_shots": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lane_blockers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "mothership_stage": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "death_timer": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rejuvenator": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "white_ufo": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "berzerk": {
+        "objects": {
+            "enemy_bullets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_bullet": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "otto": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "blackjack": {
+        "objects": {
+            "dealer_current_card_sum": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_bet": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "label": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_current_card_sum": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "breakout": {
+        "objects": {
+            "ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "blocks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "centipede": {
+        "objects": {
+            "flea": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "scorpion": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "mushrooms": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_spell": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "spider": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "centipede": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "choppercommand": {
+        "objects": {
+            "enemy_missiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "trucks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "jets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "choppers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_missiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "enduro": {
+        "objects": {
+            "enemy_positions": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "road_features": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "fishingderby": {
+        "objects": {
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "hook_p1": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fish": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "shark": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "flagcapture": {
+        "objects": {
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "grid": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "time": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "freeway": {
+        "objects": {
+            "car": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "chicken": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "frostbite": {
+        "objects": {
+            "obstacles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bailey": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "temperature": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ice_grid": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bear": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "igloo_progress": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "galaxian": {
+        "objects": {
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bombs": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "missiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "aliens": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "hauntedhouse": {
+        "objects": {
+            "items": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "matches_used": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "match_duration": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "item_held": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "chasing": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "humancannonball": {
+        "objects": {
+            "mph": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "human": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "water_tower": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "cannon": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "kangaroo": {
+        "objects": {
+            "fruits": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "falling_coconut": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ladders": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "platforms": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "child": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bell": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "monkeys": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "thrown_coconuts": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "kingkong": {
+        "objects": {
+            "princess": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "kong": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bombs": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "lasergates": {
+        "objects": {
+            "dtime": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "byte_bat": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "radar_mortar": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rock_muncher_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "densepack": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lower_mountains": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "homing_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "upper_mountains": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "detonator": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "radar_mortar_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rock_muncher": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "forcefields": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "energy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "energy_pod": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "shields": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "montezumarevenge": {
+        "objects": {
+            "items": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "doors": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ropes": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "platforms": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "conveyors": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "mspacman": {
+        "objects": {
+            "ghost_positions": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ghost_actions": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_action": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fruit_action": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fruit_type": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_position": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fruit_position": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "pellets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "power_pellets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "namethisgame": {
+        "objects": {
+            "tentacles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "oxygen_frames_remaining": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "spear": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "shark": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "round_idx": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "oxygen_line": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "boat": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "phoenix": {
+        "objects": {
+            "boss_blocks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy_projectiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "boss": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_projectile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "pong": {
+        "objects": {
+            "ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score_enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score_player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "qbert": {
+        "objects": {
+            "green_ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "purple_ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "pyramid": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "red_balls": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "sam": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "snake": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "round_number": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level_number": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "riverraid": {
+        "objects": {
+            "island_right_bank": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_speed": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_fuel": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "river_right_bank": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "dam_indicator": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "fuel_tanks": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "house_trees": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "river_left_bank": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_projectile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "island_left_bank": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "seaquest": {
+        "objects": {
+            "oxygen_level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "projectiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "collected_divers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "divers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "sirlancelot": {
+        "objects": {
+            "fireballs": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "stage": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "dragon": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "slotmachine": {
+        "objects": {
+            "last_reward_p1": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "game_over": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player2_wager": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "is_spinning": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "winner": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "last_payout_p2": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "reel_symbols": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "last_reward_p2": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player1_wager": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player2_credits": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "last_payout_p1": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player1_credits": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "jackpot_mode": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "spaceinvaders": {
+        "objects": {
+            "enemy_bullets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "barricade_health": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ufo": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_bullet": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score_player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "spacewar": {
+        "objects": {
+            "player_ammo": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_fuel": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "star_base": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "tennis": {
+        "objects": {
+            "enemy_points": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "is_serving_state": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy_sets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_points": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_sets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "tetris": {
+        "objects": {
+            "active_piece": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "board": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "next_piece": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "game_over": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "timepilot": {
+        "objects": {
+            "clouds": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies_remaining": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemy_missiles": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level_boss": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "tron": {
+        "objects": {
+            "doors": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "wave_index": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "discs": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "turmoil": {
+        "objects": {
+            "prize": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "game_phase": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bullet": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ships": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "venture": {
+        "objects": {
+            "lasers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "chaser": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "portals": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "monsters": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "chest": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "videocube": {
+        "objects": {
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_color": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "cube_current_view": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "videopinball": {
+        "objects": {
+            "spinners": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "ball": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "plunger": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "hole_plugs": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "color_cycling": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rollovers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "targets": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bumper_multiplier": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "tilt_mode_active": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "bumpers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "atari_symbols": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "lives_lost": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "rollover_counter": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "flippers": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    },
+    "wordzapper": {
+        "objects": {
+            "game_phase": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "waiting_for_special": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "target_word": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "letters": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "score": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_missile": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "current_letter_index": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "level_word_len": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "player_zapper": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            },
+            "enemies": {
+                "class_id": "TODO",
+                "x_offset": 0,
+                "y_offset": 0
+            }
+        }
+    }
+}
