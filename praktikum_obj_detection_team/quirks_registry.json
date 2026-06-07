@@ -1,253 +1,591 @@
 {
     "amidar": {
         "objects": {
-            "walked_on_paths": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "completed_rectangles": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "paths": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "player_gorilla": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_paint_roller": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemy": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "paths": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "walked_on_paths": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "completed_rectangles": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "alien": {
         "objects": {
-            "score_item_position": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "kill_item_position": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies_killable": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 1,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 6,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    6
+                ]
             }
         }
     },
     "asterix": {
         "objects": {
-            "enemies": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "enemies": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "collectibles": {
-                "class_id": "TODO",
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "asteroids": {
         "objects": {
-            "missiles": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "missiles": {
+                "class_id": 2,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "asteroids": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "atlantis": {
         "objects": {
-            "plasma": {
-                "class_id": "TODO",
+            "enemy": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "bullet": {
-                "class_id": "TODO",
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "enemy": {
-                "class_id": "TODO",
+            "plasma": {
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "installations_alive": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 6,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    6
+                ]
             }
         }
     },
     "bankheist": {
         "objects": {
-            "banks": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "dynamite": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "banks": {
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "dynamite": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "beamrider": {
         "objects": {
-            "chasing_meteoroids": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "mothership": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "rejuvenator": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "bouncer": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "lane_blockers": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "coins": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "white_ufo": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemy_shots": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "white_ufo_pattern_timer": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_shots": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "white_ufo_pattern_id": {
-                "class_id": "TODO",
+            "white_ufo": {
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "kamikaze": {
-                "class_id": "TODO",
+            "enemy_shots": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "chasing_meteoroids": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "falling_rocks": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "lane_blockers": {
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "coins": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "kamikaze": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "rejuvenator": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "bouncer": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "mothership": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "white_ufo_pattern_id": {
+                "class_id": 5,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 3,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    3
+                ]
+            },
+            "white_ufo_pattern_timer": {
+                "class_id": 5,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 3,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    3
+                ]
             }
         }
     },
     "berzerk": {
         "objects": {
-            "enemy_bullets": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "otto": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemies": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_bullet": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemies": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "enemy_bullets": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "otto": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
@@ -256,1001 +594,2423 @@
     },
     "breakout": {
         "objects": {
-            "ball": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "ball": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "blocks": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 4,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    6,
+                    18
+                ]
             }
         }
     },
     "centipede": {
         "objects": {
-            "player_spell": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "spider": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "centipede": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "flea": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "mushrooms": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "centipede": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "spider": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "flea": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "scorpion": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "player_spell": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "choppercommand": {
         "objects": {
-            "player_missiles": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "trucks": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemy_missiles": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "jets": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "choppers": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemy_missiles": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "player_missiles": {
+                "class_id": 0,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "enduro": {
         "objects": {
             "enemy_positions": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 1,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    7,
+                    2
+                ]
             },
             "road_features": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 3,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    3
+                ]
             }
         }
     },
     "fishingderby": {
         "objects": {
             "hook_p1": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "fish": {
-                "class_id": "TODO",
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "shark": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "flagcapture": {
         "objects": {
-            "grid": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "player": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "grid": {
+                "class_id": 4,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    9,
+                    7
+                ]
             }
         }
     },
     "freeway": {
         "objects": {
             "chicken": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "car": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "frostbite": {
         "objects": {
-            "ice_grid": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "bear": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "bailey": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "obstacles": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "bear": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "ice_grid": {
+                "class_id": 4,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    4,
+                    16
+                ]
             }
         }
     },
     "galaxian": {
         "objects": {
-            "aliens": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "aliens": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "missiles": {
-                "class_id": "TODO",
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "bombs": {
-                "class_id": "TODO",
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "hauntedhouse": {
         "objects": {
-            "items": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "items": {
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "humancannonball": {
         "objects": {
             "human": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "water_tower": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "cannon": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "kangaroo": {
         "objects": {
-            "child": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "monkeys": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "thrown_coconuts": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "falling_coconut": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "bell": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "fruits": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "platforms": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "ladders": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "fruits": {
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "bell": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "child": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "falling_coconut": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "monkeys": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "thrown_coconuts": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "kingkong": {
         "objects": {
-            "bombs": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "princess": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "kong": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "princess": {
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "bombs": {
+                "class_id": 2,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "lasergates": {
         "objects": {
-            "byte_bat": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "rock_muncher_missile": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_missile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "radar_mortar_missile": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "detonator": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "upper_mountains": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "energy_pod": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "radar_mortar": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "forcefields": {
-                "class_id": "TODO",
+            "radar_mortar_missile": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "densepack": {
-                "class_id": "TODO",
+            "byte_bat": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "lower_mountains": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "rock_muncher": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "rock_muncher_missile": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "homing_missile": {
-                "class_id": "TODO",
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "forcefields": {
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "densepack": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "detonator": {
+                "class_id": 2,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "energy_pod": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "upper_mountains": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "lower_mountains": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "namethisgame": {
         "objects": {
-            "oxygen_line": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "shark": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "spear": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "tentacles": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "oxygen_line": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "boat": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "phoenix": {
         "objects": {
-            "enemy_projectiles": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "boss_blocks": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemies": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "boss": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_projectile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemy_projectiles": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "enemies": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "boss": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "boss_blocks": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "pong": {
         "objects": {
-            "ball": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemy": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "ball": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "qbert": {
         "objects": {
-            "red_balls": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "snake": {
-                "class_id": "TODO",
+            "red_balls": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "purple_ball": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "pyramid": {
-                "class_id": "TODO",
+            "snake": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "green_ball": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "sam": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+            "pyramid": {
+                "class_id": "REVIEW",
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    8,
+                    8
+                ]
             }
         }
     },
     "riverraid": {
         "objects": {
-            "fuel_tanks": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "island_left_bank": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "river_right_bank": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "house_trees": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "dam_indicator": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "river_left_bank": {
-                "class_id": "TODO",
+            "fuel_tanks": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "island_right_bank": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_projectile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "house_trees": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "river_left_bank": {
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 210,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    210
+                ]
+            },
+            "river_right_bank": {
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 210,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    210
+                ]
+            },
+            "island_left_bank": {
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 210,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    210
+                ]
+            },
+            "island_right_bank": {
+                "class_id": 4,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 210,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    210
+                ]
+            },
+            "dam_indicator": {
+                "class_id": "REVIEW",
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 210,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    210
+                ]
             }
         }
     },
     "seaquest": {
         "objects": {
-            "projectiles": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemies": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "divers": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemies": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "projectiles": {
+                "class_id": 2,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "sirlancelot": {
         "objects": {
-            "fireballs": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "dragon": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "fireballs": {
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "slotmachine": {
         "objects": {
             "reel_symbols": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": "REVIEW",
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    3,
+                    3
+                ]
             }
         }
     },
     "spaceinvaders": {
         "objects": {
-            "enemy_bullets": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "barricade_health": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_bullet": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemy_bullets": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "ufo": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "barricade_health": {
+                "class_id": "REVIEW",
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    3,
+                    6,
+                    8
+                ]
             }
         }
     },
     "spacewar": {
         "objects": {
-            "star_base": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_missile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemy": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "star_base": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "tennis": {
         "objects": {
-            "ball": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemy": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "ball": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "tetris": {
         "objects": {
             "board": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 4,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    22,
+                    10
+                ]
             },
             "active_piece": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "next_piece": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "timepilot": {
         "objects": {
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
             "player_missile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "level_boss": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemy_missiles": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "level_boss": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "enemy_missiles": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "clouds": {
-                "class_id": "TODO",
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "tron": {
         "objects": {
-            "doors": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "discs": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "discs": {
+                "class_id": 5,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "doors": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "turmoil": {
         "objects": {
-            "bullet": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "prize": {
-                "class_id": "TODO",
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "bullet": {
+                "class_id": 2,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "venture": {
         "objects": {
-            "lasers": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "chest": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "monsters": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "chaser": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "portals": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "chest": {
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "lasers": {
+                "class_id": 2,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "chaser": {
+                "class_id": 1,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "videocube": {
         "objects": {
-            "cube_current_view": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "player": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "cube_current_view": {
+                "class_id": 4,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    3,
+                    3
+                ]
             }
         }
     },
     "videopinball": {
         "objects": {
-            "plunger": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "hole_plugs": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "spinners": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "targets": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "rollovers": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "ball": {
-                "class_id": "TODO",
+                "class_id": "REVIEW",
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "flippers": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "spinners": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "plunger": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "targets": {
+                "class_id": "REVIEW",
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "bumpers": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "rollovers": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "hole_plugs": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     },
     "wordzapper": {
         "objects": {
-            "target_word": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_missile": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "player_zapper": {
-                "class_id": "TODO",
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "enemies": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "letters": {
-                "class_id": "TODO",
+                "class_id": 3,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
-            "player": {
-                "class_id": "TODO",
+            "enemies": {
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "target_word": {
+                "class_id": 3,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 6,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    6
+                ]
             }
         }
     },
     "mspacman": {
         "objects": {
-            "fruit_position": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
             "ghost_positions": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "pellets": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "power_pellets": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "player_position": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 1,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    4,
+                    2
+                ]
             },
             "ghost_actions": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "class_id": 1,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 4,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    4
+                ]
+            },
+            "pellets": {
+                "class_id": 3,
+                "detected_type": "unknown_array",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": [
+                    4,
+                    18,
+                    14
+                ]
+            },
+            "power_pellets": {
+                "class_id": 3,
+                "detected_type": "grid",
+                "x_offset": null,
+                "y_offset": null,
+                "grid_origin_x": 0,
+                "grid_origin_y": 0,
+                "cell_w": 8,
+                "cell_h": 8,
+                "grid_cols": 4,
+                "active_value": 1.0,
+                "_raw_shape": [
+                    4,
+                    4
+                ]
             }
         }
     },
     "montezumarevenge": {
         "objects": {
-            "items": {
-                "class_id": "TODO",
+            "player": {
+                "class_id": 0,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "conveyors": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "ropes": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            },
-            "doors": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "enemies": {
-                "class_id": "TODO",
+                "class_id": 1,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "items": {
+                "class_id": 3,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "conveyors": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "doors": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
+            },
+            "ropes": {
+                "class_id": 4,
+                "detected_type": "entity",
+                "x_offset": 0,
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             },
             "platforms": {
-                "class_id": "TODO",
+                "class_id": 4,
+                "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0
-            },
-            "player": {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
+                "y_offset": 0,
+                "grid_origin_x": null,
+                "grid_origin_y": null,
+                "cell_w": null,
+                "cell_h": null,
+                "grid_cols": null,
+                "active_value": null,
+                "_raw_shape": null
             }
         }
     }

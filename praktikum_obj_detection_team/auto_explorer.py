@@ -1,23 +1,171 @@
-import os
 import json
 import jax
 import jaxatari
 from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
+# =============================================================================
+#  GLOBAL CLASS MAP
+#
+#  0  player       — the character(s) the human controls
+#  1  enemy        — anything that can kill/harm the player
+#  2  projectile   — bullets, missiles, bombs (player or enemy)
+#  3  collectible  — items that give points, power-ups, rewards
+#  4  structure    — platforms, blocks, walls, static grid elements
+#  5  neutral      — moving objects that are neither threat nor reward
+# =============================================================================
+
+GLOBAL_CLASSES = {
+    0: "player",
+    1: "enemy",
+    2: "projectile",
+    3: "collectible",
+    4: "structure",
+    5: "neutral",
+}
+
+# ---------------------------------------------------------------------------
+# Keyword rules for auto-assigning class IDs.
+# Checked in order — first match wins.
+# Extend this list freely if you find object names that don't resolve well.
+# ---------------------------------------------------------------------------
+
+CLASS_KEYWORDS = [
+    # class 0 — player
+    (0, ["player", "bailey", "chicken", "human", "hook"]),
+
+    # class 1 — enemy
+    (1, ["enemy", "enemies", "otto", "bear", "shark", "spider",
+         "centipede", "flea", "scorpion", "alien", "kong", "monkeys",
+         "mothership", "byte_bat", "rock_muncher", "radar_mortar",
+         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser"]),
+
+    # class 2 — projectile
+    (2, ["bullet", "missile", "shot", "spell", "plasma",
+         "bomb", "laser", "torpedo", "fireball", "projectile",
+         "detonator", "homing"]),
+
+    # class 3 — collectible
+    (3, ["collectible", "fruit", "child", "bell", "princess",
+         "item", "coin", "rejuvenator", "energy_pod", "fish",
+         "score_item", "kill_item", "prize", "chest", "key",
+         "power", "pellet", "letter", "target_word"]),
+
+    # class 4 — structure
+    (4, ["block", "platform", "ladder", "wall", "grid", "path",
+         "bank", "installation", "forcefield", "densepack",
+         "mountain", "lane_blocker", "road", "ice", "obstacle",
+         "board", "cube", "bumper", "flipper", "plunger",
+         "rollover", "hole", "spinner", "door", "portal",
+         "rope", "conveyor", "completed_rect", "walked"]),
+
+    # class 5 — neutral
+    (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",
+         "falling_rock", "meteoroid", "astero", "debris", "disc"]),
+]
+
+
+def auto_assign_class(obj_name):
+    """
+    Walk CLASS_KEYWORDS and return the first matching class ID.
+    Returns None if nothing matches —  'REVIEW' in the JSON.
+    """
+    name_lower = obj_name.lower()
+    for class_id, keywords in CLASS_KEYWORDS:
+        for kw in keywords:
+            if kw in name_lower:
+                return class_id
+    return None
+
+
+def detect_type(obj_data):
+    """
+    Returns {"detected_type": str, "raw_shape": list|None}
+
+    entity        — named-tuple with .x/.y  (standard JaxAtari objects)
+    grid          — raw flat or 2-D JAX array encoding tile occupancy
+    unknown_array — raw JAX array whose spatial role is ambiguous (3-D+)
+    non_spatial   — scalar, timer, flag; no bounding box possible
+    """
+    if obj_data is None:
+        return {"detected_type": "non_spatial", "raw_shape": None}
+
+    if hasattr(obj_data, 'x') or hasattr(obj_data, 'xy'):
+        return {"detected_type": "entity", "raw_shape": None}
+
+    if hasattr(obj_data, 'shape'):
+        shape = list(obj_data.shape)
+        total = 1
+        for s in shape:
+            total *= s
+
+        if len(shape) == 0 or total <= 8:
+            return {"detected_type": "non_spatial", "raw_shape": shape}
+        if len(shape) == 1:
+            return {"detected_type": "grid", "raw_shape": shape}
+        if len(shape) == 2:
+            return {"detected_type": "grid", "raw_shape": shape}
+        # 3-D+ — stacked frames of a grid or something else; flag for review
+        return {"detected_type": "unknown_array", "raw_shape": shape}
+
+    return {"detected_type": "non_spatial", "raw_shape": None}
+
+
+
+def build_entry(obj_name, detected_type, raw_shape):
+    class_id = auto_assign_class(obj_name)
+    class_id_value = class_id if class_id is not None else "REVIEW"
+
+    is_entity = detected_type == "entity"
+    is_grid   = detected_type == "grid"
+
+    # Infer grid_cols from shape where possible
+    if is_grid and raw_shape:
+        if len(raw_shape) == 1:
+            grid_cols = "TODO"   # flat 1-D: total cells known, cols unknown
+        else:
+            grid_cols = raw_shape[-1]   # (rows, cols) or (frames, rows, cols)
+    else:
+        grid_cols = None
+
+    return {
+        "class_id":      class_id_value,   # int if matched, "REVIEW" if not
+        "detected_type": detected_type,
+
+
+        "x_offset": 0    if is_entity else None,
+        "y_offset": 0    if is_entity else None,
+
+        # ── grid fields (if array) ──────────────────────────────────
+        # Tune grid_origin_* and cell_w/h with the debug overlay.
+        # grid_cols is auto-inferred where possible, set manually for flat 1-D.
+        "grid_origin_x": 0    if is_grid else None,
+        "grid_origin_y": 0    if is_grid else None,
+        "cell_w":        8    if is_grid else None,
+        "cell_h":        8    if is_grid else None,
+        "grid_cols":     grid_cols,
+        "active_value":  1.0  if is_grid else None,
+
+        "_raw_shape":    raw_shape,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Games list
+# ---------------------------------------------------------------------------
+
 ATARI_57 = [
     "alien", "amidar", "asterix", "asteroids", "atlantis",
     "bankheist", "beamrider", "berzerk", "blackjack", "breakout",
-    "centipede", "choppercommand", "defender", "enduro", "fishingderby", "flagcapture",
-    "freeway", "frostbite", "galaxian", "gravitar", "hauntedhouse",
-    "humancannonball", "kangaroo", "kingkong", "lasergates", "montezumarevenge",
-    "mspacman", "namethisgame", "phoenix", "pitfall", "pong", "privateeye", "qbert",
-    "riverraid", "seaquest", "sirlancelot", "skiing", "slotmachine",
-    "spaceinvaders", "spacewar", "surround", "tennis", "tetris", "timepilot",
-    "tron", "turmoil", "venture", "videocube", "videopinball",
-    "wordzapper", "yarsrevenge", "zaxxon" # (Plus the missing ones)
+    "centipede", "choppercommand", "defender", "enduro", "fishingderby",
+    "flagcapture", "freeway", "frostbite", "galaxian", "gravitar",
+    "hauntedhouse", "humancannonball", "kangaroo", "kingkong", "lasergates",
+    "montezumarevenge", "mspacman", "namethisgame", "phoenix", "pitfall",
+    "pong", "privateeye", "qbert", "riverraid", "seaquest", "sirlancelot",
+    "skiing", "slotmachine", "spaceinvaders", "spacewar", "surround",
+    "tennis", "tetris", "timepilot", "tron", "turmoil", "venture",
+    "videocube", "videopinball", "wordzapper", "yarsrevenge", "zaxxon",
 ]
 
-# currently implemented atari games
 AVAILABLE_GAMES = [
     'amidar', 'alien', 'asterix', 'asteroids', 'atlantis', 'bankheist',
     'beamrider', 'berzerk', 'blackjack', 'breakout', 'centipede',
@@ -27,97 +175,107 @@ AVAILABLE_GAMES = [
     'pong', 'qbert', 'riverraid', 'seaquest', 'sirlancelot', 'skiing',
     'slotmachine', 'spaceinvaders', 'spacewar', 'tennis', 'tetris',
     'timepilot', 'tron', 'turmoil', 'venture', 'videocube', 'videopinball',
-    'wordzapper', 'mspacman', 'montezumarevenge'
+    'wordzapper', 'mspacman', 'montezumarevenge',
 ]
-TARGET_FRAMES = 500
+
+TARGET_FRAMES  = 60   # frames explored per game to discover all objects
+REGISTRY_PATH  = "quirks_registry.json"
+
 
 master_registry = {}
 
 for game_name in AVAILABLE_GAMES:
-    print(f"\n{'=' * 40}")
+    print(f"\n{'=' * 50}")
     print(f" SCANNING: {game_name.upper()}")
-    print(f"{'=' * 40}")
+    print(f"{'=' * 50}")
 
     try:
-        # start up the game
-        base_env = jaxatari.make(game_name)
+        base_env  = jaxatari.make(game_name)
         atari_env = AtariWrapper(base_env)
-        env = PixelAndObjectObsWrapper(atari_env)
+        env       = PixelAndObjectObsWrapper(atari_env)
 
-        # PRNG Setup
         rng = jax.random.PRNGKey(42)
         rng, reset_key = jax.random.split(rng)
         current_obs, state = env.reset(reset_key)
 
         frame_count = 0
-        discovered_objects = set()
+        discovered  = {}   # obj_name -> {detected_type, raw_shape}
 
         while frame_count < TARGET_FRAMES:
             rng, action_key = jax.random.split(rng)
-            action = jax.random.randint(action_key, shape=(), minval=0, maxval=env.action_space().n)
+            action = jax.random.randint(
+                action_key, shape=(), minval=0, maxval=env.action_space().n
+            )
 
-            # Take a step in the environment
             current_obs, state, reward, stopped, truncated, info = env.step(state, action)
             frame_count += 1
 
-            # Split the JAX tuple
             image_stack, obs_stack = current_obs
+            objects_dict = (obs_stack._asdict() if hasattr(obs_stack, '_asdict')
+                            else obs_stack.__dict__)
 
-            # Force it into dictionary
-            if hasattr(obs_stack, '_asdict'):
-                objects_dict = obs_stack._asdict()
-            else:
-                objects_dict = obs_stack.__dict__
-
-            # The Memory Filter
             for obj_name, obj_data in objects_dict.items():
-
-                if obj_data is None:
+                if obj_name in discovered:
                     continue
+                meta = detect_type(obj_data)
+                if meta["detected_type"] == "non_spatial":
+                    continue
+                discovered[obj_name] = meta
+                assigned = auto_assign_class(obj_name)
+                class_label = (f"class {assigned} ({GLOBAL_CLASSES[assigned]})"
+                               if assigned is not None else "REVIEW")
+                print(f"  [{frame_count:>4}]  {meta['detected_type'].upper():14s}  "
+                      f"{obj_name:<30s}  -> {class_label}"
+                      + (f"  shape={meta['raw_shape']}" if meta['raw_shape'] else ""))
 
-                has_coordinates = False
-
-                if hasattr(obj_data, 'x') or hasattr(obj_data, 'xy'):
-                    has_coordinates = True
-
-                #raw JAX array handling
-                elif hasattr(obj_data, 'shape'):
-                    # If the shape is just (4,), it's a timer/scalar
-                    # If the last dimension is >= 2 (x,y or x,y,w,h), it's spatial
-                    if len(obj_data.shape) > 1 and obj_data.shape[-1] >= 2:
-                        has_coordinates = True
-
-                if has_coordinates and obj_name not in discovered_objects:
-                    discovered_objects.add(obj_name)
-                    print(f"[{frame_count}/{TARGET_FRAMES}] New Spatial Object Discovered: {obj_name}")
-
-            # if game ends/player dies, reset the game
             if stopped or truncated:
                 rng, reset_key = jax.random.split(rng)
                 current_obs, state = env.reset(reset_key)
 
-        print(f"\nExploration Over! Found {len(discovered_objects)} unique objects.")
+        print(f"\n  Done. {len(discovered)} spatial objects found.")
 
+        # Count how many need manual review
+        needs_review = [n for n in discovered
+                        if auto_assign_class(n) is None]
+        if needs_review:
+            print(f"  *** REVIEW NEEDED for: {needs_review}")
 
-        # Loop through your discovered set and attach the default math
-        master_registry[game_name] = {"objects": {}}
+        game_objects = {}
+        for obj_name, meta in discovered.items():
+            game_objects[obj_name] = build_entry(
+                obj_name, meta["detected_type"], meta["raw_shape"]
+            )
 
-        for obj_name in discovered_objects:
-            master_registry[game_name]["objects"][obj_name] = {
-                "class_id": "TODO",
-                "x_offset": 0,
-                "y_offset": 0
-            }
+        master_registry[game_name] = {"objects": game_objects}
 
-        with open("quirks_registry.json", "w") as outfile:
-            json.dump(master_registry, outfile, indent=4)
-
-        print(f"Registry successfully updated with {game_name}!")
+        # Write after every game so a crash doesn't lose earlier work
+        with open(REGISTRY_PATH, "w") as f:
+            json.dump(master_registry, f, indent=4)
+        print(f"  Registry saved -> {REGISTRY_PATH}")
 
     except Exception as e:
-        print(f">>> [CRITICAL] Pipeline failed on {game_name}!")
-        print(f">>> Error Details: {e}")
-        print(f">>> Skipping {game_name} and continuing pipeline...")
-        continue  # Abort this specific game and jump to the next one
+        print(f">>> [CRITICAL] Failed on {game_name}: {e}")
+        continue
 
-    print(f"\nPIPELINE COMPLETE! The quirks_registry.json file is fully populated with {game_name} information.")
+print(f"\n{'=' * 50}")
+print(" SCAN COMPLETE — REVIEW SUMMARY")
+print(f"{'=' * 50}")
+for game_name, game_data in master_registry.items():
+    flagged = [
+        name for name, entry in game_data["objects"].items()
+        if entry["class_id"] == "REVIEW"
+    ]
+    if flagged:
+        print(f"  {game_name}: {flagged}")
+unknown_types = [
+    f"{g}/{n}"
+    for g, gd in master_registry.items()
+    for n, e in gd["objects"].items()
+    if e["detected_type"] == "unknown_array"
+]
+if unknown_types:
+    print(f"\n  unknown_array objects (inspect manually): {unknown_types}")
+print("\nAll done. Edit quirks_registry.json to fix any REVIEW entries,")
+print("then tune grid_origin_*/cell_w/h for grid objects using data_extractor's debug overlay.")
+
+

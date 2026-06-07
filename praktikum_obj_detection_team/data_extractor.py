@@ -1,264 +1,291 @@
 import os
+import json
 import cv2
 import numpy as np
 import jax
 import jaxatari
 from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
-TARGET_FRAMES = 10
-DEBUG_MODE = True #toggle to false if used purely for frame extraction
+REGISTRY_PATH = "quirks_registry.json"
 
-GAME_REGISTRY = {
-    "amidar": {
-        "player_gorilla": 0, "player_paint_roller": 0, "enemy": 1,
-        "walked_on_paths": 4, "completed_rectangles": 4, "paths": 4
-    },
-    "alien": {
-        "player": 0, "enemies": 1, "enemies_killable": 1,
-        "score_item_position": 3, "kill_item_position": 3
-    },
-    "asterix": {
-        "player": 0, "enemies": 1, "collectibles": 3
-    },
-    "asteroids": {
-        "player": 0, "asteroids": 1, "missiles": 2
-    },
-    "atlantis": {
-        "enemy": 1, "plasma": 2, "bullet": 2, "installations_alive": 4
-    },
-    "bankheist": {
-        "player": 0, "enemies": 1, "dynamite": 2, "banks": 4
-    },
-    "beamrider": {
-        "player": 0, "chasing_meteoroids": 1, "mothership": 1, "bouncer": 1,
-        "white_ufo": 1, "kamikaze": 1, "falling_rocks": 1, "enemy_shots": 2,
-        "player_shots": 2, "rejuvenator": 3, "coins": 3, "lane_blockers": 4,
-        "white_ufo_pattern_timer": 5, "white_ufo_pattern_id": 5
-    },
-    "berzerk": {
-        "player": 0, "otto": 1, "enemies": 1, "enemy_bullets": 2, "player_bullet": 2
-    },
-    "blackjack": {
-        # no spatial objects
-    },
-    "breakout": {
-        "player": 0, "ball": 2, "blocks": 4
-    },
-    "centipede": {
-        "player": 0, "spider": 1, "centipede": 1, "flea": 1,
-        "scorpion": 1, "player_spell": 2, "mushrooms": 4
-    },
-    "choppercommand": {
-        "player": 0, "trucks": 1, "jets": 1, "choppers": 1,
-        "player_missiles": 2, "enemy_missiles": 2
-    },
-    "enduro": {
-        "enemy_positions": 1, "road_features": 4
-    },
-    "fishingderby": {
-        "hook_p1": 0, "shark": 1, "fish": 3
-    },
-    "flagcapture": {
-        "player": 0, "grid": 4
-    },
-    "freeway": {
-        "chicken": 0, "car": 1
-    },
-    "frostbite": {
-        "bailey": 0, "bear": 1, "obstacles": 4, "ice_grid": 4
-    },
-    "galaxian": {
-        "player": 0, "aliens": 1, "missiles": 2, "bombs": 2
-    },
-    "hauntedhouse": {
-        "player": 0, "enemies": 1, "items": 3
-    },
-    "humancannonball": {
-        "human": 0, "water_tower": 4, "cannon": 4
-    },
-    "kangaroo": {
-        "player": 0, "monkeys": 1, "thrown_coconuts": 2, "falling_coconut": 2,
-        "child": 3, "bell": 3, "fruits": 3, "platforms": 4, "ladders": 4
-    },
-    "kingkong": {
-        "player": 0, "kong": 1, "bombs": 2, "princess": 3
-    },
-    "lasergates": {
-        "player": 0, "byte_bat": 1, "rock_muncher": 1, "radar_mortar": 1,
-        "player_missile": 2, "rock_muncher_missile": 2, "radar_mortar_missile": 2,
-        "homing_missile": 2, "detonator": 3, "energy_pod": 3, "forcefields": 4,
-        "densepack": 4, "upper_mountains": 4, "lower_mountains": 4
-    }
+TARGET_FRAMES  = 10
+DEBUG_MODE     = True
+
+RUN_ALL_GAMES      = True
+SINGLE_GAME_TARGET = "alien"
+
+# Atari screen dimensions
+SCREEN_W = 160.0
+SCREEN_H = 210.0
+
+# =============================================================================
+#  GLOBAL CLASS MAP
+# =============================================================================
+
+GLOBAL_CLASSES = {
+    0: "player",
+    1: "enemy",
+    2: "projectile",
+    3: "collectible",
+    4: "structure",
+    5: "neutral",
 }
 
-RUN_ALL_GAMES = True
-SINGLE_GAME_TARGET = "spaceinvaders"
+# Debug colours per class ID
+CLASS_COLORS = {
+    0: (0,   255,   0),    # green   — player
+    1: (0,   0,   255),    # red     — enemy
+    2: (255, 165,   0),    # orange  — projectile
+    3: (0,   215, 255),    # gold    — collectible
+    4: (180, 180, 180),    # grey    — structure
+    5: (255, 255,   0),    # cyan    — neutral
+}
 
-ACTIVE_GAMES = [
-    'amidar', 'alien', 'asterix', 'asteroids', 'atlantis', 'bankheist',
-    'beamrider', 'berzerk', 'blackjack', 'breakout', 'centipede',
-    'choppercommand', 'enduro', 'fishingderby', 'flagcapture', 'freeway',
-    'frostbite', 'galaxian', 'gravitar', 'hauntedhouse', 'humancannonball',
-    'kangaroo', 'kingkong', 'lasergates'
-]
+# identifies how the obj is stored
+TYPE_BORDER = {
+    "entity": (255,   0, 255),   # magenta
+    "grid":   (0,   255, 255),   # cyan
+}
 
-MY_GAMES = ACTIVE_GAMES if RUN_ALL_GAMES else [SINGLE_GAME_TARGET]
-
-print("Starting Extraction...")
+with open(REGISTRY_PATH, "r") as f:
+    QUIRKS_REGISTRY = json.load(f)
 
 
-for GAME_NAME in MY_GAMES:
-    print(f"\n{'=' * 50}")
-    print(f" INITIALIZING PIPELINE: {GAME_NAME.upper()}")
-    print(f"{'=' * 50}")
+def extract_entity(obj_data, entry):
+    """
+    Named-tuple entity with .x .y .width .height fields.
 
-    if GAME_NAME not in GAME_REGISTRY:
-        print(f">>> [WARNING] Skipping {GAME_NAME}: No mapping found in GAME_REGISTRY.")
-        continue
+    JAX stacks frames on axis-0, most-recent first, so we use index [0]
+    to get the current frame — NOT [-1] which is the oldest frame.
+    """
+    if not (hasattr(obj_data, 'x') and hasattr(obj_data, 'y')):
+        return []
 
-    class_mapping = GAME_REGISTRY[GAME_NAME]
-
-    if not class_mapping:
-        print(f">>> [INFO] Skipping {GAME_NAME}: Game has no spatial objects mapped (Logic Game).")
-        continue
-
-    #folder setup
-    output_folder = f"captured_{TARGET_FRAMES}frames_{GAME_NAME}"
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
+    x_off = entry.get("x_offset") or 0
+    y_off = entry.get("y_offset") or 0
 
     try:
-        # start the game up
-        print(f"Starting game {GAME_NAME}")
-        base_env = jaxatari.make(GAME_NAME)
-        atari_env = AtariWrapper(base_env)
-        env = PixelAndObjectObsWrapper(atari_env)
+        active = np.atleast_1d(obj_data.active[0]) if hasattr(obj_data, 'active') else None
+        xs = np.atleast_1d(obj_data.x[0])
+        ys = np.atleast_1d(obj_data.y[0])
+        ws = np.atleast_1d(obj_data.width[0])
+        hs = np.atleast_1d(obj_data.height[0])
+    except (AttributeError, IndexError):
+        return []
 
-        #pure jax setup, jax requires random keys for everything it does
+    boxes = []
+    for i in range(len(xs)):
+        if active is not None and not bool(active[i]):
+            continue
+        x = float(xs[i]) + x_off
+        y = float(ys[i]) + y_off
+        w = float(ws[i])
+        h = float(hs[i])
+        if (x == 0 and y == 0) or w == 0 or h == 0:
+            continue
+        boxes.append((x, y, w, h))
+    return boxes
+
+
+def extract_grid(obj_data, entry):
+    """
+    Raw flat / 2-D JAX array where each element represents one tile.
+    Non-zero (matching active_value) cells become bounding boxes.
+
+    Tune grid_origin_x/y and cell_w/h in the registry
+    """
+    origin_x  = entry.get("grid_origin_x") or 0
+    origin_y  = entry.get("grid_origin_y") or 0
+    cell_w    = entry.get("cell_w") or 8
+    cell_h    = entry.get("cell_h") or 8
+    grid_cols = entry.get("grid_cols")
+    active_v  = entry.get("active_value") if entry.get("active_value") is not None else 1.0
+
+    if not grid_cols or grid_cols == "TODO":
+        print(f"      [SKIP] grid_cols not set — update registry and re-run")
+        return []
+    try:
+        arr = np.array(obj_data).reshape(-1)
+    except Exception:
+        return []
+
+    # 3-D stacked frames: (frames, rows, cols) — unwrap to frame 0
+    raw_shape = entry.get("_raw_shape") or []
+    if len(raw_shape) >= 3:
+        try:
+            arr = np.array(obj_data[0]).reshape(-1)
+        except Exception:
+            pass
+
+    boxes = []
+    for idx, val in enumerate(arr):
+        fval = float(val)
+        if fval == 0.0:
+            continue
+        if active_v != 1.0 and fval != active_v:
+            continue
+        col = idx % int(grid_cols)
+        row = idx // int(grid_cols)
+        px  = origin_x + col * cell_w
+        py  = origin_y + row * cell_h
+        boxes.append((px, py, cell_w, cell_h))
+    return boxes
+
+
+def to_yolo(class_id, x, y, w, h):
+    xc = min((x + w / 2.0) / SCREEN_W, 1.0)
+    yc = min((y + h / 2.0) / SCREEN_H, 1.0)
+    wn = min(w / SCREEN_W, 1.0)
+    hn = min(h / SCREEN_H, 1.0)
+    return f"{class_id} {xc:.6f} {yc:.6f} {wn:.6f} {hn:.6f}"
+
+def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
+    fill_color   = CLASS_COLORS.get(class_id, (255, 255, 255))
+    border_color = TYPE_BORDER.get(obj_type, (255, 255, 255))
+    x1, y1, x2, y2 = int(x), int(y), int(x + w), int(y + h)
+
+    # Outer border encodes storage type (entity=magenta, grid=cyan)
+    cv2.rectangle(frame, (x1 - 1, y1 - 1), (x2 + 1, y2 + 1), border_color, 1)
+    cv2.rectangle(frame, (x1, y1), (x2, y2), fill_color, 2)
+
+    class_name = GLOBAL_CLASSES.get(class_id, str(class_id))
+    label = f"{class_name} | {obj_name}"
+    cv2.putText(frame, label, (x1, max(y1 - 4, 8)),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.32, fill_color, 1, cv2.LINE_AA)
+
+
+
+games_to_run = list(QUIRKS_REGISTRY.keys()) if RUN_ALL_GAMES else [SINGLE_GAME_TARGET]
+
+print("=" * 50)
+print(" DATA EXTRACTOR")
+print(f" Mode: {'ALL GAMES' if RUN_ALL_GAMES else SINGLE_GAME_TARGET.upper()}")
+print(f" Frames per game: {TARGET_FRAMES}")
+print(f" Debug overlay: {DEBUG_MODE}")
+print("=" * 50)
+
+for game_name in games_to_run:
+    print(f"\n{'─' * 50}")
+    print(f" {game_name.upper()}")
+    print(f"{'─' * 50}")
+
+    if game_name not in QUIRKS_REGISTRY:
+        print(f"  [SKIP] Not in registry — run auto_explorer first.")
+        continue
+
+    objects_cfg = QUIRKS_REGISTRY[game_name].get("objects", {})
+
+    # Only extract objects that have been fully assigned
+    active_cfg = {
+        name: entry for name, entry in objects_cfg.items()
+        if isinstance(entry.get("class_id"), int)
+    }
+    skipped = [n for n in objects_cfg if n not in active_cfg]
+
+    if not active_cfg:
+        print(f"  [SKIP] No class_ids assigned yet — edit registry first.")
+        continue
+
+    if skipped:
+        print(f"  [INFO] Skipping unassigned: {skipped}")
+
+    obj_summary = [f"{n}(cls={e['class_id']})" for n, e in active_cfg.items()]
+    print(f"  Extracting {len(active_cfg)} objects: {obj_summary}")
+
+    output_folder = f"dataset/{game_name}"
+    os.makedirs(output_folder, exist_ok=True)
+
+    try:
+        base_env  = jaxatari.make(game_name)
+        atari_env = AtariWrapper(base_env)
+        env       = PixelAndObjectObsWrapper(atari_env)
+
         rng = jax.random.PRNGKey(42)
         rng, reset_key = jax.random.split(rng)
-
         current_obs, state = env.reset(reset_key)
 
-        frame_count = 0
-        saved_count = 0
+        frame_count       = 0
+        saved_count       = 0
+        MAX_IDLE_FRAMES   = 3000
+        frames_since_save = 0
 
-        MAX_IDLE_FRAMES = 3000
-        frames_since_last_save = 0
-
-        print(f"Starting Extraction for {GAME_NAME}...")
-
-        while saved_count < TARGET_FRAMES and frames_since_last_save < MAX_IDLE_FRAMES:
+        while saved_count < TARGET_FRAMES and frames_since_save < MAX_IDLE_FRAMES:
             rng, action_key = jax.random.split(rng)
-            action = jax.random.randint(action_key, shape=(), minval=0, maxval=env.action_space().n)
+            action = jax.random.randint(action_key, shape=(),
+                                        minval=0, maxval=env.action_space().n)
 
             current_obs, state, reward, stopped, truncated, info = env.step(state, action)
-            frame_count += 1
-            frames_since_last_save += 1
+            frame_count       += 1
+            frames_since_save += 1
 
             if frame_count % 20 == 0:
-                base_filename = f"{output_folder}/frame_{saved_count}"
-
                 image_stack, obs_stack = current_obs
-                pixels = np.array(image_stack[-1])
+                pixels    = np.array(image_stack[-1])
                 frame_bgr = cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
 
+                objects_dict = (obs_stack._asdict() if hasattr(obs_stack, '_asdict')
+                                else obs_stack.__dict__)
 
                 yolo_lines = []
 
-                if hasattr(obs_stack, '_asdict'):
-                    objects_dict = obs_stack._asdict()
-                else:
-                    objects_dict = obs_stack.__dict__
-
-
-                for obj_name, obj_data in objects_dict.items():
-
-                    class_id = class_mapping.get(obj_name, -1)
-
-                    if class_id == -1:
+                for obj_name, entry in active_cfg.items():
+                    obj_data = objects_dict.get(obj_name)
+                    if obj_data is None:
                         continue
 
-                    # Map the class IDs
-                    # if obj active but has no jax flag, try/except it
-                    # ensure object has x/y properties before mathing
-                    if not (hasattr(obj_data, 'x') and hasattr(obj_data, 'y')):
+                    class_id = entry["class_id"]
+                    obj_type = entry.get("detected_type", "entity")
+
+                    if obj_type == "entity":
+                        boxes = extract_entity(obj_data, entry)
+                    elif obj_type == "grid":
+                        boxes = extract_grid(obj_data, entry)
+                    else:
+                        # unknown_array — needs manual classification in registry
                         continue
 
-                    # JAX stores coordinates directly as .x, .y, .width, .height arrays
-                    try:
-                        #some objects may already have active array tracking if alive
-                        is_active = True
-                        if hasattr(obj_data, 'active'):
-                            active_array = np.atleast_1d(obj_data.active[-1])
-                        else:
-                            active_array = None
-
-                        x_array = np.atleast_1d(obj_data.x[-1])
-                        y_array = np.atleast_1d(obj_data.y[-1])
-                        w_array = np.atleast_1d(obj_data.width[-1])
-                        h_array = np.atleast_1d(obj_data.height[-1])
-
-                    except AttributeError:
-                        continue
-
-
-
-                    for i in range(len(x_array)):
-                        # If the object has an active flag and it's False, skip
-                        if active_array is not None and not bool(active_array[i]):
-                            continue
-
-                        x = float(x_array[i])
-                        y = float(y_array[i])
-                        w = float(w_array[i])
-                        h = float(h_array[i])
-
-                        # Skip dead/hidden objects
-                        if (x == 0 and y == 0) or w == 0 or h == 0:
-                            continue
-
-                        # YOLO Math (Normalized 0.0 to 1.0)
-                        x_center = min((x + (w / 2.0)) / 160.0, 1.0)
-                        y_center = min((y + (h / 2.0)) / 210.0, 1.0)
-                        w_norm = min(w / 160.0, 1.0)
-                        h_norm = min(h / 210.0, 1.0)
-
-                        yolo_lines.append(f"{class_id} {x_center:.6f} {y_center:.6f} {w_norm:.6f} {h_norm:.6f}")
-
+                    for (x, y, w, h) in boxes:
+                        yolo_lines.append(to_yolo(class_id, x, y, w, h))
                         if DEBUG_MODE:
-                            cv2.rectangle(frame_bgr, (int(x), int(y)), (int(x + w), int(y + h)), (255, 0, 255), 2)
-                            # text label
-                            cv2.putText(frame_bgr, str(class_id), (int(x), int(y) - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.4,
-                                        (255, 0, 255), 1)
+                            draw_debug_box(frame_bgr, x, y, w, h,
+                                           class_id, obj_type, obj_name)
 
-                #savve only if objects found
                 if yolo_lines:
-                    with open(f"{base_filename}.txt", "w") as f:
+                    base = f"{output_folder}/frame_{saved_count:05d}"
+                    with open(f"{base}.txt", "w") as f:
                         f.write("\n".join(yolo_lines))
-                    cv2.imwrite(f"{base_filename}.png", frame_bgr)
-                    saved_count += 1
-                    frames_since_last_save = 0
-
-                    print(f"  -> Generated pair {saved_count}/{TARGET_FRAMES}: {len(yolo_lines)} objects found")
+                    cv2.imwrite(f"{base}.png", frame_bgr)
+                    saved_count       += 1
+                    frames_since_save  = 0
+                    print(f"  [{saved_count:>4}/{TARGET_FRAMES}] "
+                          f"{len(yolo_lines)} annotations saved")
                 else:
-                    print(f"  -> Frame {frame_count} skipped (no mapped objects visible)")
+                    print(f"  [frame {frame_count}] no visible objects — skipping")
 
             if stopped or truncated:
                 rng, reset_key = jax.random.split(rng)
                 current_obs, state = env.reset(reset_key)
 
-
-        if frames_since_last_save >= MAX_IDLE_FRAMES:
-            print(f">>> [WARNING] Extraction timed out for {GAME_NAME}. Stuck on empty screens. Saved {saved_count}/{TARGET_FRAMES} frames.")
+        if frames_since_save >= MAX_IDLE_FRAMES:
+            print(f"  [WARNING] Timed out — saved {saved_count}/{TARGET_FRAMES} frames.")
+        else:
+            print(f"  Done — {saved_count} frame pairs saved to {output_folder}/")
 
     except Exception as e:
-        print(f">>> [CRITICAL] Pipeline failed on {GAME_NAME}!")
-        print(f">>> Error Details: {e}")
-        print(f">>> Skipping {GAME_NAME} and continuing to next game...")
+        print(f"  [CRITICAL] {e}")
+        continue
 
-print("\n" + "=" * 50)
-print(" GLOBAL PIPELINE COMPLETE")
+
+classes_yaml_path = "classes.yaml"
+with open(classes_yaml_path, "w") as f:
+    f.write("# YOLOv8 class definitions — generated by data_extractor.py\n")
+    f.write(f"nc: {len(GLOBAL_CLASSES)}\n")
+    f.write("names:\n")
+    for class_id in sorted(GLOBAL_CLASSES):
+        f.write(f"  {class_id}: {GLOBAL_CLASSES[class_id]}\n")
+
+print(f"\n{'=' * 50}")
+print(" PIPELINE COMPLETE")
+print(f" Dataset written to: dataset/")
+print(f" Class definitions:  {classes_yaml_path}")
 print("=" * 50)
-
