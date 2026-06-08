@@ -12,7 +12,7 @@ TARGET_FRAMES  = 10
 DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
-RUN_ALL_GAMES      = False
+RUN_ALL_GAMES      = True
 SINGLE_GAME_TARGET = "alien"
 
 # Atari screen dimensions
