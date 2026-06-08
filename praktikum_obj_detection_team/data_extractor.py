@@ -11,7 +11,7 @@ REGISTRY_PATH = "quirks_registry.json"
 TARGET_FRAMES  = 10
 DEBUG_MODE     = True
 
-RUN_ALL_GAMES      = True
+RUN_ALL_GAMES      = False
 SINGLE_GAME_TARGET = "alien"
 
 # Atari screen dimensions
@@ -37,14 +37,14 @@ CLASS_COLORS = {
     1: (0,   0,   255),    # red     — enemy
     2: (255, 165,   0),    # orange  — projectile
     3: (0,   215, 255),    # gold    — collectible
-    4: (180, 180, 180),    # grey    — structure
-    5: (255, 255,   0),    # cyan    — neutral
+    4: (219, 55,  170),    # purple    — structure
+    5: (180, 180, 180),    # gray    — neutral
 }
 
 # identifies how the obj is stored
 TYPE_BORDER = {
     "entity": (255,   0, 255),   # magenta
-    "grid":   (0,   255, 255),   # cyan
+    "grid":   (255,   255, 0),   # cyan
 }
 
 with open(REGISTRY_PATH, "r") as f:
@@ -120,7 +120,7 @@ def extract_grid(obj_data, entry):
     boxes = []
     for idx, val in enumerate(arr):
         fval = float(val)
-        if fval == 0.0:
+        if fval == 0.0 and active_v != 0.0:
             continue
         if active_v != 1.0 and fval != active_v:
             continue
@@ -146,12 +146,12 @@ def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
 
     # Outer border encodes storage type (entity=magenta, grid=cyan)
     cv2.rectangle(frame, (x1 - 1, y1 - 1), (x2 + 1, y2 + 1), border_color, 1)
-    cv2.rectangle(frame, (x1, y1), (x2, y2), fill_color, 2)
+    cv2.rectangle(frame, (x1, y1), (x2, y2), fill_color, 1)
 
     class_name = GLOBAL_CLASSES.get(class_id, str(class_id))
     label = f"{class_name} | {obj_name}"
     cv2.putText(frame, label, (x1, max(y1 - 4, 8)),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.32, fill_color, 1, cv2.LINE_AA)
+                cv2.FONT_HERSHEY_SIMPLEX, 0.25, fill_color, 1, cv2.LINE_AA)
 
 
 
@@ -192,7 +192,9 @@ for game_name in games_to_run:
     obj_summary = [f"{n}(cls={e['class_id']})" for n, e in active_cfg.items()]
     print(f"  Extracting {len(active_cfg)} objects: {obj_summary}")
 
-    output_folder = f"dataset/{game_name}"
+
+    base_dir = "quirks_debug" if DEBUG_MODE else "dataset"
+    output_folder = f"{base_dir}/{game_name}"
     os.makedirs(output_folder, exist_ok=True)
 
     try:
@@ -220,7 +222,7 @@ for game_name in games_to_run:
 
             if frame_count % 20 == 0:
                 image_stack, obs_stack = current_obs
-                pixels    = np.array(image_stack[-1])
+                pixels    = np.array(image_stack[0])
                 frame_bgr = cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
 
                 objects_dict = (obs_stack._asdict() if hasattr(obs_stack, '_asdict')
