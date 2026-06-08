@@ -10,9 +10,10 @@ REGISTRY_PATH = "quirks_registry.json"
 
 TARGET_FRAMES  = 10
 DEBUG_MODE     = True
+DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "alien"
+SINGLE_GAME_TARGET = "atlantis"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -45,6 +46,7 @@ CLASS_COLORS = {
 TYPE_BORDER = {
     "entity": (255,   0, 255),   # magenta
     "grid":   (255,   255, 0),   # cyan
+    "static_entity": (0,   255,   255)
 }
 
 with open(REGISTRY_PATH, "r") as f:
@@ -77,10 +79,15 @@ def extract_entity(obj_data, entry):
     for i in range(len(xs)):
         if active is not None and not bool(active[i]):
             continue
+
+        if xs[i] <= 1 or ys[i] <= 1:
+            continue
+
         x = float(xs[i]) + x_off
         y = float(ys[i]) + y_off
         w = float(ws[i])
         h = float(hs[i])
+
         if (x == 0 and y == 0) or w == 0 or h == 0:
             continue
         boxes.append((x, y, w, h))
@@ -129,8 +136,56 @@ def extract_grid(obj_data, entry):
         px  = origin_x + col * cell_w
         py  = origin_y + row * cell_h
         boxes.append((px, py, cell_w, cell_h))
+
     return boxes
 
+
+def extract_xy_pairs(obj_data, entry):
+    try:
+        x_off = entry.get("x_offset") or 0
+        y_off = entry.get("y_offset") or 0
+        cw = entry.get("cell_w") or 8
+        ch = entry.get("cell_h") or 8
+        boxes = []
+        for pair in obj_data[0]:
+            x = float(pair[0]) + x_off
+            y = float(pair[1]) + y_off
+            if float(pair[0]) > 1 and float(pair[1]) > 1:
+                boxes.append((x, y, cw, ch))
+        return boxes
+    except Exception:
+        return []
+
+
+def extract_true_2d_grid(obj_data, entry):
+    try:
+        grid, boxes = obj_data[0], []
+        rows, cols = grid.shape
+        cw = entry.get("cell_w") or (SCREEN_W / cols)
+        ch = entry.get("cell_h") or (SCREEN_H / rows)
+        ox, oy = entry.get("grid_origin_x", 0), entry.get("grid_origin_y", 0)
+        av = entry.get("active_value", 1.0)
+
+        for r in range(rows):
+            for c in range(cols):
+                if float(grid[r, c]) == av:
+                    boxes.append((ox + (c * cw), oy + (r * ch), cw, ch))
+        return boxes
+    except Exception:
+        return []
+
+
+def extract_flat_per_row(obj_data, entry):
+    try:
+        indices = np.where(obj_data[0] > 1)[0]
+        if not len(indices): return []
+        min_y, max_y = float(np.min(indices)), float(np.max(indices))
+        x_vals = obj_data[0][indices]
+        min_x, max_x = float(np.min(x_vals)), float(np.max(x_vals))
+        w, h = max_x - min_x, max_y - min_y
+        return [(min_x, min_y, w, h)] if w > 0 and h > 0 else []
+    except Exception:
+        return []
 
 def to_yolo(class_id, x, y, w, h):
     xc = min((x + w / 2.0) / SCREEN_W, 1.0)
@@ -148,10 +203,11 @@ def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
     cv2.rectangle(frame, (x1 - 1, y1 - 1), (x2 + 1, y2 + 1), border_color, 1)
     cv2.rectangle(frame, (x1, y1), (x2, y2), fill_color, 1)
 
-    class_name = GLOBAL_CLASSES.get(class_id, str(class_id))
-    label = f"{class_name} | {obj_name}"
-    cv2.putText(frame, label, (x1, max(y1 - 4, 8)),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.25, fill_color, 1, cv2.LINE_AA)
+    if DEBUG_LABELS:
+        class_name = GLOBAL_CLASSES.get(class_id, str(class_id))
+        label = f"{class_name} | {obj_name}"
+        cv2.putText(frame, label, (x1, max(y1 - 4, 8)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.25, fill_color, 1, cv2.LINE_AA)
 
 
 
@@ -231,20 +287,30 @@ for game_name in games_to_run:
                 yolo_lines = []
 
                 for obj_name, entry in active_cfg.items():
-                    obj_data = objects_dict.get(obj_name)
-                    if obj_data is None:
-                        continue
-
                     class_id = entry["class_id"]
                     obj_type = entry.get("detected_type", "entity")
 
-                    if obj_type == "entity":
-                        boxes = extract_entity(obj_data, entry)
-                    elif obj_type == "grid":
-                        boxes = extract_grid(obj_data, entry)
+                    # Handle static entities directly from JSON without checking RAM
+                    if obj_type == "static_entity":
+                        boxes = entry.get("static_boxes") or []
                     else:
-                        # unknown_array — needs manual classification in registry
-                        continue
+                        # Dynamic entities must exist in RAM
+                        obj_data = objects_dict.get(obj_name)
+                        if obj_data is None:
+                            continue
+
+                        if obj_type == "entity":
+                            boxes = extract_entity(obj_data, entry)
+                        elif obj_type == "grid" or obj_type == "true_2d_grid":
+                            boxes = extract_true_2d_grid(obj_data, entry)
+                        elif obj_type == "xy_pairs":
+                            boxes = extract_xy_pairs(obj_data, entry)
+                        elif obj_type == "flat_per_row":
+                            boxes = extract_flat_per_row(obj_data, entry)
+                        elif obj_type == "slot_flags":
+                            continue
+                        else:
+                            continue
 
                     for (x, y, w, h) in boxes:
                         yolo_lines.append(to_yolo(class_id, x, y, w, h))

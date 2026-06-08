@@ -1,7 +1,17 @@
+import os
 import json
 import jax
 import jaxatari
 from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
+
+REGISTRY_PATH  = "quirks_registry.json"
+
+
+if os.path.exists(REGISTRY_PATH):
+    with open(REGISTRY_PATH, "r") as f:
+        master_registry = json.load(f)
+else:
+    master_registry = {}
 
 # =============================================================================
 #  GLOBAL CLASS MAP
@@ -80,31 +90,42 @@ def auto_assign_class(obj_name):
 def detect_type(obj_data):
     """
     Returns {"detected_type": str, "raw_shape": list|None}
-
-    entity        — named-tuple with .x/.y  (standard JaxAtari objects)
-    grid          — raw flat or 2-D JAX array encoding tile occupancy
-    unknown_array — raw JAX array whose spatial role is ambiguous (3-D+)
-    non_spatial   — scalar, timer, flag; no bounding box possible
     """
     if obj_data is None:
         return {"detected_type": "non_spatial", "raw_shape": None}
 
+    # 1. PRESERVE THIS: Standard JAXAtari entities with explicit coordinates
     if hasattr(obj_data, 'x') or hasattr(obj_data, 'xy'):
         return {"detected_type": "entity", "raw_shape": None}
 
+    # 2. THE NEW ARRAY CLASSIFIERS
     if hasattr(obj_data, 'shape'):
         shape = list(obj_data.shape)
         total = 1
         for s in shape:
             total *= s
 
+        # Ignore non-spatial scalars or tiny boolean arrays
         if len(shape) == 0 or total <= 8:
             return {"detected_type": "non_spatial", "raw_shape": shape}
-        if len(shape) == 1:
-            return {"detected_type": "grid", "raw_shape": shape}
-        if len(shape) == 2:
-            return {"detected_type": "grid", "raw_shape": shape}
-        # 3-D+ — stacked frames of a grid or something else; flag for review
+
+        # Pattern 1: slot_flags [4, N] (No spatial data, skip rendering)
+        if len(shape) == 2 and shape[0] == 4 and shape[1] < 210:
+            return {"detected_type": "slot_flags", "raw_shape": shape}
+
+        # Pattern 2: xy_pairs [4, N, 2] (Raw coordinates)
+        if len(shape) == 3 and shape[0] == 4 and shape[2] == 2:
+            return {"detected_type": "xy_pairs", "raw_shape": shape}
+
+        # Pattern 3: true_2d_grid [4, rows, cols]
+        if len(shape) == 3 and shape[0] == 4 and shape[2] != 2:
+            return {"detected_type": "true_2d_grid", "raw_shape": shape}
+
+        # Pattern 4: flat_per_row [4, 210] (Scanlines)
+        if len(shape) == 2 and shape[1] == 210:
+            return {"detected_type": "flat_per_row", "raw_shape": shape}
+
+        # Catch anything weird that survived
         return {"detected_type": "unknown_array", "raw_shape": shape}
 
     return {"detected_type": "non_spatial", "raw_shape": None}
@@ -115,8 +136,9 @@ def build_entry(obj_name, detected_type, raw_shape):
     class_id = auto_assign_class(obj_name)
     class_id_value = class_id if class_id is not None else "REVIEW"
 
-    is_entity = detected_type == "entity"
-    is_grid   = detected_type == "grid"
+    # XY pairs are entities, true_2d_grids are grids
+    is_entity = detected_type in ["entity", "xy_pairs"]
+    is_grid = detected_type == "true_2d_grid"
 
     # Infer grid_cols from shape where possible
     if is_grid and raw_shape:
@@ -240,11 +262,19 @@ for game_name in AVAILABLE_GAMES:
         if needs_review:
             print(f"  *** REVIEW NEEDED for: {needs_review}")
 
+        existing_objects = master_registry.get(game_name, {}).get("objects", {})
         game_objects = {}
+
+        # Bring over EVERYTHING from the old registry (offsets, static entities, manual classes)
+        for old_name, old_entry in existing_objects.items():
+            game_objects[old_name] = old_entry
+
+        # Add ONLY the new objects we discovered this run
         for obj_name, meta in discovered.items():
-            game_objects[obj_name] = build_entry(
-                obj_name, meta["detected_type"], meta["raw_shape"]
-            )
+            if obj_name not in game_objects:
+                game_objects[obj_name] = build_entry(
+                    obj_name, meta["detected_type"], meta["raw_shape"]
+                )
 
         master_registry[game_name] = {"objects": game_objects}
 
