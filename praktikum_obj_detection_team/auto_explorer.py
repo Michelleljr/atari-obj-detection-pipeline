@@ -7,12 +7,6 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 REGISTRY_PATH  = "quirks_registry.json"
 
 
-if os.path.exists(REGISTRY_PATH):
-    with open(REGISTRY_PATH, "r") as f:
-        master_registry = json.load(f)
-else:
-    master_registry = {}
-
 # =============================================================================
 #  GLOBAL CLASS MAP
 #
@@ -47,7 +41,7 @@ CLASS_KEYWORDS = [
     (1, ["enemy", "enemies", "otto", "bear", "shark", "spider",
          "centipede", "flea", "scorpion", "alien", "kong", "monkeys",
          "mothership", "byte_bat", "rock_muncher", "radar_mortar",
-         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser"]),
+         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser", "asteroids"]),
 
     # class 2 — projectile
     (2, ["bullet", "missile", "shot", "spell", "plasma",
@@ -70,7 +64,7 @@ CLASS_KEYWORDS = [
 
     # class 5 — neutral
     (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",
-         "falling_rock", "meteoroid", "astero", "debris", "disc"]),
+         "falling_rock", "meteoroid", "debris", "disc"]),
 ]
 
 
@@ -174,6 +168,8 @@ def build_entry(obj_name, detected_type, raw_shape):
 # ---------------------------------------------------------------------------
 # Games list
 # ---------------------------------------------------------------------------
+RUN_ALL_GAMES      = False
+SINGLE_GAME_TARGET = "asteroids"
 
 ATARI_57 = [
     "alien", "amidar", "asterix", "asteroids", "atlantis",
@@ -201,12 +197,17 @@ AVAILABLE_GAMES = [
 ]
 
 TARGET_FRAMES  = 60   # frames explored per game to discover all objects
-REGISTRY_PATH  = "quirks_registry.json"
-
 
 master_registry = {}
 
-for game_name in AVAILABLE_GAMES:
+if os.path.exists(REGISTRY_PATH):
+    with open(REGISTRY_PATH, "r") as f:
+        master_registry = json.load(f)
+
+
+games_to_run = AVAILABLE_GAMES if RUN_ALL_GAMES else [SINGLE_GAME_TARGET]
+
+for game_name in games_to_run:
     print(f"\n{'=' * 50}")
     print(f" SCANNING: {game_name.upper()}")
     print(f"{'=' * 50}")
@@ -276,7 +277,20 @@ for game_name in AVAILABLE_GAMES:
                     obj_name, meta["detected_type"], meta["raw_shape"]
                 )
 
-        master_registry[game_name] = {"objects": game_objects}
+        # Fetch any manually tuned data you've already saved for this game
+        existing_objects = master_registry.get(game_name, {}).get("objects", {})
+        final_game_objects = {}
+
+        # 1. Keep absolutely everything from your current file intact
+        for old_name, old_entry in existing_objects.items():
+            final_game_objects[old_name] = old_entry
+
+         # 2. Only add completely new variables found during this scan
+        for obj_name, entry_data in game_objects.items():
+            if obj_name not in final_game_objects:
+                final_game_objects[obj_name] = entry_data
+
+        master_registry[game_name] = {"objects": final_game_objects}
 
         # Write after every game so a crash doesn't lose earlier work
         with open(REGISTRY_PATH, "w") as f:

@@ -199,8 +199,8 @@
                 "_raw_shape": null
             },
             "asteroids": {
-                "class_id": 5,
-                "detected_type": "entity",
+                "class_id": 1,
+                "detected_type": "enemy",
                 "x_offset": 0,
                 "y_offset": 0,
                 "grid_origin_x": null,
@@ -220,8 +220,8 @@
             "detected_type": "static_entity",
             "static_boxes": [
                 [0, 116, 8, 8],
-                [70, 104, 8, 8],
-                [152, 104, 8, 8]
+                [72, 104, 8, 8],
+                [150, 104, 8, 8]
             ]
         },
             "enemy": {

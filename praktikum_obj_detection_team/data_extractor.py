@@ -13,7 +13,7 @@ DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "atlantis"
+SINGLE_GAME_TARGET = "asteroids"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
