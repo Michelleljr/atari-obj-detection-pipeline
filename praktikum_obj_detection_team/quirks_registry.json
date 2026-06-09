@@ -215,6 +215,15 @@
     },
     "atlantis": {
         "objects": {
+            "player_installations": {
+            "class_id": 0,
+            "detected_type": "static_entity",
+            "static_boxes": [
+                [0, 116, 8, 8],
+                [70, 104, 8, 8],
+                [152, 104, 8, 8]
+            ]
+        },
             "enemy": {
                 "class_id": 1,
                 "detected_type": "entity",

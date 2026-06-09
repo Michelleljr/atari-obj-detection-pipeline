@@ -12,8 +12,8 @@ TARGET_FRAMES  = 10
 DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
-RUN_ALL_GAMES      = True
-SINGLE_GAME_TARGET = "alien"
+RUN_ALL_GAMES      = False
+SINGLE_GAME_TARGET = "atlantis"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -45,8 +45,10 @@ CLASS_COLORS = {
 # identifies how the obj is stored
 TYPE_BORDER = {
     "entity": (255,   0, 255),   # magenta
-    "grid":   (255,   255, 0),   # cyan
-    "static_entity": (0,   255,   255)
+    "xy_pairs":      (255, 100,   0),   # orange-red
+    "flat_per_row":  ( 64, 255, 255),   # cyan
+    "true_2d_grid":  (255, 255,   0),   # yellow
+    "static_entity": (  255, 0, 0),   # blue
 }
 
 with open(REGISTRY_PATH, "r") as f:
@@ -94,58 +96,12 @@ def extract_entity(obj_data, entry):
     return boxes
 
 
-def extract_grid(obj_data, entry):
-    """
-    Raw flat / 2-D JAX array where each element represents one tile.
-    Non-zero (matching active_value) cells become bounding boxes.
-
-    Tune grid_origin_x/y and cell_w/h in the registry
-    """
-    origin_x  = entry.get("grid_origin_x") or 0
-    origin_y  = entry.get("grid_origin_y") or 0
-    cell_w    = entry.get("cell_w") or 8
-    cell_h    = entry.get("cell_h") or 8
-    grid_cols = entry.get("grid_cols")
-    active_v  = entry.get("active_value") if entry.get("active_value") is not None else 1.0
-
-    if not grid_cols or grid_cols == "TODO":
-        print(f"      [SKIP] grid_cols not set — update registry and re-run")
-        return []
-    try:
-        arr = np.array(obj_data).reshape(-1)
-    except Exception:
-        return []
-
-    # 3-D stacked frames: (frames, rows, cols) — unwrap to frame 0
-    raw_shape = entry.get("_raw_shape") or []
-    if len(raw_shape) >= 3:
-        try:
-            arr = np.array(obj_data[0]).reshape(-1)
-        except Exception:
-            pass
-
-    boxes = []
-    for idx, val in enumerate(arr):
-        fval = float(val)
-        if fval == 0.0 and active_v != 0.0:
-            continue
-        if active_v != 1.0 and fval != active_v:
-            continue
-        col = idx % int(grid_cols)
-        row = idx // int(grid_cols)
-        px  = origin_x + col * cell_w
-        py  = origin_y + row * cell_h
-        boxes.append((px, py, cell_w, cell_h))
-
-    return boxes
-
-
 def extract_xy_pairs(obj_data, entry):
     try:
         x_off = entry.get("x_offset") or 0
         y_off = entry.get("y_offset") or 0
-        cw = entry.get("cell_w") or 8
-        ch = entry.get("cell_h") or 8
+        cw = entry.get("obj_w") or entry.get("cell_w") or 8
+        ch = entry.get("obj_h") or entry.get("cell_h") or 8
         boxes = []
         for pair in obj_data[0]:
             x = float(pair[0]) + x_off
@@ -158,6 +114,7 @@ def extract_xy_pairs(obj_data, entry):
 
 
 def extract_true_2d_grid(obj_data, entry):
+    """[4, R, C] — maps tile layouts dynamically based on row/column indices."""
     try:
         grid, boxes = obj_data[0], []
         rows, cols = grid.shape
@@ -176,16 +133,63 @@ def extract_true_2d_grid(obj_data, entry):
 
 
 def extract_flat_per_row(obj_data, entry):
+    """
+    [4, 210] — splits continuous vertical contours into manageable chunks
+    so extreme bounding box aspect ratios do not break YOLOv8 training.
+    """
+    x_off = entry.get("x_offset") or 0
+    y_off = entry.get("y_offset") or 0
+    obj_w = entry.get("obj_w") or 8
+    active_v = entry.get("active_value")
+    max_run = int(entry.get("max_run_height") or 32)
+
     try:
-        indices = np.where(obj_data[0] > 1)[0]
-        if not len(indices): return []
-        min_y, max_y = float(np.min(indices)), float(np.max(indices))
-        x_vals = obj_data[0][indices]
-        min_x, max_x = float(np.min(x_vals)), float(np.max(x_vals))
-        w, h = max_x - min_x, max_y - min_y
-        return [(min_x, min_y, w, h)] if w > 0 and h > 0 else []
+        row_vals = np.array(obj_data[0], dtype=float)
     except Exception:
         return []
+
+    if active_v is not None:
+        active_mask = row_vals == float(active_v)
+    else:
+        active_mask = row_vals > 1
+
+    boxes = []
+
+    def _flush_segment(run_start, run_xs):
+        for chunk_start in range(0, len(run_xs), max_run):
+            chunk = run_xs[chunk_start : chunk_start + max_run]
+            x_min = float(min(chunk))
+            x_max = float(max(chunk))
+            y_top = run_start + chunk_start
+            boxes.append((
+                x_min + x_off,
+                float(y_top) + y_off,
+                (x_max - x_min) + float(obj_w),
+                float(len(chunk)),
+            ))
+
+    in_run = False
+    run_start = 0
+    run_xs = []
+
+    for y_idx in range(len(row_vals)):
+        if bool(active_mask[y_idx]):
+            if not in_run:
+                in_run = True
+                run_start = y_idx
+                run_xs = []
+            run_xs.append(float(row_vals[y_idx]))
+        else:
+            if in_run:
+                in_run = False
+                if run_xs:
+                    _flush_segment(run_start, run_xs)
+                run_xs = []
+
+    if in_run and run_xs:
+        _flush_segment(run_start, run_xs)
+
+    return boxes
 
 def to_yolo(class_id, x, y, w, h):
     xc = min((x + w / 2.0) / SCREEN_W, 1.0)
