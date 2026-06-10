@@ -4,7 +4,7 @@
             "player_gorilla": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -1,
                 "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
@@ -17,7 +17,7 @@
             "player_paint_roller": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -1,
                 "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
@@ -30,7 +30,7 @@
             "enemy": {
                 "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -2,
                 "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
@@ -134,6 +134,8 @@
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
+                "w_padding": 1,
+                "h_padding": 2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -158,8 +160,10 @@
             "collectibles": {
                 "class_id": 3,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -2,
+                "y_offset": -1,
+                "w_padding": 1,
+                "h_padding": 4,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -200,7 +204,7 @@
             },
             "asteroids": {
                 "class_id": 1,
-                "detected_type": "enemy",
+                "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
                 "grid_origin_x": null,
@@ -216,14 +220,29 @@
     "atlantis": {
         "objects": {
             "player_installations": {
-            "class_id": 0,
-            "detected_type": "static_entity",
-            "static_boxes": [
-                [0, 116, 8, 8],
-                [72, 104, 8, 8],
-                [150, 104, 8, 8]
-            ]
-        },
+                "class_id": 0,
+                "detected_type": "static_entity",
+                "static_boxes": [
+                    [
+                        0,
+                        116,
+                        8,
+                        8
+                    ],
+                    [
+                        72,
+                        104,
+                        8,
+                        8
+                    ],
+                    [
+                        150,
+                        104,
+                        8,
+                        8
+                    ]
+                ]
+            },
             "enemy": {
                 "class_id": 1,
                 "detected_type": "entity",
@@ -342,7 +361,7 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -1,
                 "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
@@ -353,7 +372,7 @@
                 "_raw_shape": null
             },
             "player_shots": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -617,7 +636,7 @@
                 "_raw_shape": null
             },
             "ball": {
-                "class_id": "REVIEW",
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -634,10 +653,10 @@
                 "detected_type": "true_2d_grid",
                 "x_offset": null,
                 "y_offset": null,
-                "grid_origin_x": 0,
-                "grid_origin_y": 0,
-                "cell_w": 8,
-                "cell_h": 8,
+                "grid_origin_x": 9,
+                "grid_origin_y": 57,
+                "cell_w": 7.85,
+                "cell_h": 6,
                 "grid_cols": 18,
                 "active_value": 1.0,
                 "_raw_shape": [
@@ -653,8 +672,10 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -1,
+                "y_offset": -2,
+                "w_padding":1,
+                "h_padding":2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -664,7 +685,7 @@
                 "_raw_shape": null
             },
             "mushrooms": {
-                "class_id": "REVIEW",
+                "class_id": 4,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -693,7 +714,7 @@
                 "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0,
+                "y_offset": -1,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -729,7 +750,7 @@
                 "_raw_shape": null
             },
             "player_spell": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,

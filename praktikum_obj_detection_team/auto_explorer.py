@@ -46,7 +46,7 @@ CLASS_KEYWORDS = [
     # class 2 — projectile
     (2, ["bullet", "missile", "shot", "spell", "plasma",
          "bomb", "laser", "torpedo", "fireball", "projectile",
-         "detonator", "homing"]),
+         "detonator", "homing", "ball", "player_spell"]),
 
     # class 3 — collectible
     (3, ["collectible", "fruit", "child", "bell", "princess",
@@ -196,7 +196,7 @@ AVAILABLE_GAMES = [
     'wordzapper', 'mspacman', 'montezumarevenge',
 ]
 
-TARGET_FRAMES  = 60   # frames explored per game to discover all objects
+TARGET_FRAMES  = 300   # frames explored per game to discover all objects
 
 master_registry = {}
 

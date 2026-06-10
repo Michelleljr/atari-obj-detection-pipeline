@@ -13,7 +13,7 @@ DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "asteroids"
+SINGLE_GAME_TARGET = "breakout"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -36,7 +36,7 @@ GLOBAL_CLASSES = {
 CLASS_COLORS = {
     0: (0,   255,   0),    # green   — player
     1: (0,   0,   255),    # red     — enemy
-    2: (255, 165,   0),    # orange  — projectile
+    2: (255, 165,   0),    # light blue  — projectile
     3: (0,   215, 255),    # gold    — collectible
     4: (219, 55,  170),    # purple    — structure
     5: (180, 180, 180),    # gray    — neutral
@@ -68,6 +68,9 @@ def extract_entity(obj_data, entry):
     x_off = entry.get("x_offset") or 0
     y_off = entry.get("y_offset") or 0
 
+    w_pad = entry.get("w_padding") or 0
+    h_pad = entry.get("h_padding") or 0
+
     try:
         active = np.atleast_1d(obj_data.active[0]) if hasattr(obj_data, 'active') else None
         xs = np.atleast_1d(obj_data.x[0])
@@ -87,8 +90,8 @@ def extract_entity(obj_data, entry):
 
         x = float(xs[i]) + x_off
         y = float(ys[i]) + y_off
-        w = float(ws[i])
-        h = float(hs[i])
+        w = float(ws[i]) + w_pad
+        h = float(hs[i]) + h_pad
 
         if (x == 0 and y == 0) or w == 0 or h == 0:
             continue
