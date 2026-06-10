@@ -13,7 +13,7 @@ DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "fishingderby"
+SINGLE_GAME_TARGET = "frostbite"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -119,17 +119,45 @@ def extract_xy_pairs(obj_data, entry):
 def extract_true_2d_grid(obj_data, entry):
     """[4, R, C] — maps tile layouts dynamically based on row/column indices."""
     try:
-        grid, boxes = obj_data[0], []
+        grid = obj_data[0]
+
+        # 🟢 1. The Transpose Fix: Flip the mangled RAM matrix back to reality
+        if entry.get("transpose_grid"):
+            grid = grid.T
+
         rows, cols = grid.shape
+        boxes = []
+
         cw = entry.get("cell_w") or (SCREEN_W / cols)
         ch = entry.get("cell_h") or (SCREEN_H / rows)
+
+        # Separate the jump distance from the box width
+        step_x = entry.get("step_x") or cw
+        step_y = entry.get("step_y") or ch
+
         ox, oy = entry.get("grid_origin_x", 0), entry.get("grid_origin_y", 0)
-        av = entry.get("active_value", 1.0)
+
+        av = entry.get("active_value")
+        amin = entry.get("active_min")
 
         for r in range(rows):
             for c in range(cols):
-                if float(grid[r, c]) == av:
-                    boxes.append((ox + (c * cw), oy + (r * ch), cw, ch))
+                val = float(grid[r, c])
+
+                is_active = False
+                if amin is not None:
+                    if val >= float(amin):
+                        is_active = True
+                elif av is not None:
+                    if val == float(av):
+                        is_active = True
+                else:
+                    if val == 1.0:
+                        is_active = True
+
+                if is_active:
+                    # 🟢 Draw the box at the Step coordinate, using the Cell size
+                    boxes.append((ox + (c * step_x), oy + (r * step_y), cw, ch))
         return boxes
     except Exception:
         return []
