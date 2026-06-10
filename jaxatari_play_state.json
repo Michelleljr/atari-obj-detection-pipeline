@@ -1,0 +1,28 @@
+{
+  "format": "jaxatari_play_state_v1",
+  "game": "humancannonball",
+  "mods": [],
+  "state_tree": {
+    "HumanCannonballState": {
+      "human_x": 98.5491943359375,
+      "human_y": 117.00001525878906,
+      "human_x_vel": 24.248708724975586,
+      "human_y_vel": -16.0000057220459,
+      "human_launched": true,
+      "water_tower_x": 132,
+      "mph_values": 40,
+      "tower_wall_hit": false,
+      "angle": 30,
+      "angle_counter": 0,
+      "score": 0,
+      "misses": 2,
+      "step_counter": 1212,
+      "rng_key": [
+        1773327481,
+        1441649378
+      ],
+      "animation_running": false,
+      "animation_counter": 0
+    }
+  }
+}
