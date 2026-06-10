@@ -13,7 +13,7 @@ DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "breakout"
+SINGLE_GAME_TARGET = "fishingderby"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -194,6 +194,31 @@ def extract_flat_per_row(obj_data, entry):
 
     return boxes
 
+def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
+    """
+    Handles hardcoded computer vision workarounds for games where
+    JAXAtari has missing or incomplete RAM mappings.
+    """
+    if game_name == "enduro":
+        y_min, y_max = 140, 155
+        car_strip = pixels[y_min:y_max, :, :]
+        brightness = np.sum(car_strip, axis=2)
+        y_coords, x_coords = np.where(brightness > 400)
+
+        if len(x_coords) > 0:
+            car_x = int(np.min(x_coords))
+            car_w = int(np.max(x_coords) - car_x)
+            car_h = y_max - y_min
+
+            # Map directly to class 0 (Player)
+            yolo_lines.append(to_yolo(0, car_x, y_min, car_w, car_h))
+
+            if DEBUG_MODE:
+                draw_debug_box(frame_bgr, car_x, y_min, car_w, car_h,
+                               0, "entity", "player_car")
+
+        # TODO: any future games with same issue
+
 def to_yolo(class_id, x, y, w, h):
     xc = min((x + w / 2.0) / SCREEN_W, 1.0)
     yc = min((y + h / 2.0) / SCREEN_H, 1.0)
@@ -324,6 +349,8 @@ for game_name in games_to_run:
                         if DEBUG_MODE:
                             draw_debug_box(frame_bgr, x, y, w, h,
                                            class_id, obj_type, obj_name)
+
+                apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr)
 
                 if yolo_lines:
                     base = f"{output_folder}/frame_{saved_count:05d}"

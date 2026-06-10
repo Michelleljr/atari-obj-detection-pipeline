@@ -851,8 +851,8 @@
             "enemy_positions": {
                 "class_id": 1,
                 "detected_type": "xy_pairs",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -3,
+                "y_offset": -1,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -888,8 +888,8 @@
             "hook_p1": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -2,
+                "y_offset": -2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -914,8 +914,10 @@
             "shark": {
                 "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": 3,
                 "y_offset": 0,
+                "w_padding": 12,
+                "h_padding": 6,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
