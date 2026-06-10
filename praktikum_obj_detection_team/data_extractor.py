@@ -6,14 +6,15 @@ import jax
 import jaxatari
 from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
+
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 10
+TARGET_FRAMES  = 100
 DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "frostbite"
+SINGLE_GAME_TARGET = "hauntedhouse"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -244,7 +245,6 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
             if DEBUG_MODE:
                 draw_debug_box(frame_bgr, car_x, y_min, car_w, car_h,
                                0, "entity", "player_car")
-
         # TODO: any future games with same issue
 
 def to_yolo(class_id, x, y, w, h):
@@ -336,7 +336,7 @@ for game_name in games_to_run:
             frame_count       += 1
             frames_since_save += 1
 
-            if frame_count % 20 == 0:
+            if frame_count % 60 == 0:
                 image_stack, obs_stack = current_obs
                 pixels    = np.array(image_stack[0])
                 frame_bgr = cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
