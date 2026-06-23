@@ -41,18 +41,18 @@ CLASS_KEYWORDS = [
     (1, ["enemy", "enemies", "otto", "bear", "shark", "spider",
          "centipede", "flea", "scorpion", "alien", "kong", "monkeys",
          "mothership", "byte_bat", "rock_muncher", "radar_mortar",
-         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser", "asteroids"]),
+         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser", "asteroids", "tentacles"]),
 
     # class 2 — projectile
     (2, ["bullet", "missile", "shot", "spell", "plasma",
          "bomb", "laser", "torpedo", "fireball", "projectile",
-         "detonator", "homing", "ball", "player_spell"]),
+         "detonator", "homing", "ball", "player_spell", "spear"]),
 
     # class 3 — collectible
     (3, ["collectible", "fruit", "child", "bell", "princess",
          "item", "coin", "rejuvenator", "energy_pod", "fish",
          "score_item", "kill_item", "prize", "chest", "key",
-         "power", "pellet", "letter", "target_word"]),
+         "power", "pellet", "letter", "target_word", "oxygen_line"]),
 
     # class 4 — structure
     (4, ["block", "platform", "ladder", "wall", "grid", "path",
@@ -64,7 +64,7 @@ CLASS_KEYWORDS = [
 
     # class 5 — neutral
     (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",
-         "falling_rock", "meteoroid", "debris", "disc"]),
+         "falling_rock", "meteoroid", "debris", "disc", "boat"]),
 ]
 
 
@@ -169,7 +169,7 @@ def build_entry(obj_name, detected_type, raw_shape):
 # Games list
 # ---------------------------------------------------------------------------
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "asteroids"
+SINGLE_GAME_TARGET = "namethisgame"
 
 ATARI_57 = [
     "alien", "amidar", "asterix", "asteroids", "atlantis",

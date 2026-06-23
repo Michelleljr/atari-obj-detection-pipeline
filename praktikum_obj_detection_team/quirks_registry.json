@@ -674,8 +674,8 @@
                 "detected_type": "entity",
                 "x_offset": -1,
                 "y_offset": -2,
-                "w_padding":1,
-                "h_padding":2,
+                "w_padding": 1,
+                "h_padding": 2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1594,7 +1594,7 @@
                 "_raw_shape": null
             },
             "spear": {
-                "class_id": "REVIEW",
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1607,7 +1607,7 @@
                 "_raw_shape": null
             },
             "tentacles": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1620,7 +1620,7 @@
                 "_raw_shape": null
             },
             "oxygen_line": {
-                "class_id": "REVIEW",
+                "class_id": 3,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1633,7 +1633,7 @@
                 "_raw_shape": null
             },
             "boat": {
-                "class_id": "REVIEW",
+                "class_id": 5,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,

@@ -14,7 +14,7 @@ DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "kingkong"
+SINGLE_GAME_TARGET = "namethisgame"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
