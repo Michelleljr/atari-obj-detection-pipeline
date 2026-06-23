@@ -46,7 +46,7 @@ CLASS_KEYWORDS = [
     # class 2 — projectile
     (2, ["bullet", "missile", "shot", "spell", "plasma",
          "bomb", "laser", "torpedo", "fireball", "projectile",
-         "detonator", "homing", "ball", "player_spell", "spear"]),
+         "detonator", "homing", "ball", "player_spell", "spear", "ball"]),
 
     # class 3 — collectible
     (3, ["collectible", "fruit", "child", "bell", "princess",
