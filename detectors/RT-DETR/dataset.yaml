@@ -1,0 +1,9 @@
+path: ./dataset          # root of the prepared dataset
+train: images/train
+val:   images/val
+
+nc: 3
+names:
+  0: player
+  1: enemy
+  2: ball
