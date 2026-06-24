@@ -9,12 +9,12 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 40
+TARGET_FRAMES  = 10
 DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "namethisgame"
+SINGLE_GAME_TARGET = "spaceinvaders"
 
 # Atari screen dimensions
 SCREEN_W = 160.0

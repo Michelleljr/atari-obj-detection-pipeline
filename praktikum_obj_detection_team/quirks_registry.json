@@ -2158,7 +2158,7 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 1,
+                "x_offset": -8,
                 "y_offset": 1,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
