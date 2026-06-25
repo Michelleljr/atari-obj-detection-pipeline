@@ -25,6 +25,7 @@ GLOBAL_CLASSES = {
     3: "collectible",
     4: "structure",
     5: "neutral",
+    6: "enemy_projectile"
 }
 
 # ---------------------------------------------------------------------------
@@ -60,11 +61,14 @@ CLASS_KEYWORDS = [
          "mountain", "lane_blocker", "road", "ice", "obstacle",
          "board", "cube", "bumper", "flipper", "plunger",
          "rollover", "hole", "spinner", "door", "portal",
-         "rope", "conveyor", "completed_rect", "walked"]),
+         "rope", "conveyor", "completed_rect", "walked", "barricade_health"]),
 
     # class 5 — neutral
     (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",
          "falling_rock", "meteoroid", "debris", "disc", "boat"]),
+
+    # class 6 - enemy_projectile
+    (6,["enemy_bullets"])
 ]
 
 
@@ -169,7 +173,7 @@ def build_entry(obj_name, detected_type, raw_shape):
 # Games list
 # ---------------------------------------------------------------------------
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "namethisgame"
+SINGLE_GAME_TARGET = "spaceinvaders"
 
 ATARI_57 = [
     "alien", "amidar", "asterix", "asteroids", "atlantis",

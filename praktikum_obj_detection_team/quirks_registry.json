@@ -2182,7 +2182,7 @@
                 "_raw_shape": null
             },
             "player_bullet": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 1,
                 "y_offset": 1,
@@ -2195,7 +2195,7 @@
                 "_raw_shape": null
             },
             "enemy_bullets": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 1,
                 "y_offset": 1,
@@ -2221,7 +2221,7 @@
                 "_raw_shape": null
             },
             "barricade_health": {
-                "class_id": "REVIEW",
+                "class_id": "4",
                 "detected_type": "unknown_array",
                 "x_offset": null,
                 "y_offset": null,
@@ -2256,7 +2256,7 @@
                 "_raw_shape": null
             },
             "player_missile": {
-                "class_id": 0,
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,

@@ -14,7 +14,7 @@ DEBUG_MODE     = False
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "asteroids"
+SINGLE_GAME_TARGET = "spaceinvaders"
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -31,6 +31,7 @@ GLOBAL_CLASSES = {
     3: "collectible",
     4: "structure",
     5: "neutral",
+    6: "enemy_projectile"
 }
 
 # Debug colours per class ID
@@ -41,6 +42,7 @@ CLASS_COLORS = {
     3: (0,   215, 255),    # gold    — collectible
     4: (219, 55,  170),    # purple    — structure
     5: (180, 180, 180),    # gray    — neutral
+    6: (255, 255, 255)     # white   — enemy_projectile
 }
 
 # identifies how the obj is stored

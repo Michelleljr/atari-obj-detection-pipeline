@@ -4,7 +4,7 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 #  Start the game up
 print("Booting Matrix Scanner...")
-base_env = jaxatari.make("hauntedhouse")  # game to be scanned
+base_env = jaxatari.make("spaceinvaders")  # game to be scanned
 atari_env = AtariWrapper(base_env)
 env = PixelAndObjectObsWrapper(atari_env)
 
