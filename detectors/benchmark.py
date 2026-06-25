@@ -3,7 +3,7 @@ from pathlib import Path
 
 script_dir = Path(__file__).parent
 
-yolo_path = script_dir / "YOLOv8nano" / "weights" / "my_model.pt"
+yolo_path = script_dir / "YOLOv8nano" / "weights" / "pong_YOLObest.pt"
 rtdetr_path = script_dir / "RT-DETR" / "yolo26n"
 yaml_path = script_dir / "RT-DETR" / "dataset.yaml"
 

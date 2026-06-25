@@ -18,7 +18,7 @@ from ultralytics import YOLO
 import torch
 import jax
 
-CURRENT_GAME = "spaceinvaders"
+CURRENT_GAME = "asteroids"
 mode = "live"  # switch between already captured frames detections and live game detections [static/live]
 
 UNIVERSAL_NAMES = {
@@ -36,27 +36,24 @@ UNIVERSAL_COLOURS = {
     6: (255, 255, 255)  # white   — enemy_projectile
 }
 
-PONG_NAMES = {
-    0: "player", 1: "enemy", 2: "ball"
-}
-PONG_COLOURS = {
-    0: (0, 255, 100),   # green
-    1: (0, 100, 255),   # orange-red
-    2: (255, 255, 255)  # white
+
+GAME_REGISTRY = {
+    "pong": {
+
+        "names_override": {0: "player", 1: "enemy", 2: "ball"},
+        "colours_override": {0: (0, 255, 100), 1: (0, 100, 255), 2: (255, 255, 255)}
+    }
 }
 
-if CURRENT_GAME == "pong":
-    ACTIVE_NAMES = PONG_NAMES
-    ACTIVE_COLOURS = PONG_COLOURS
-    WEIGHTS_FILE = "pong_best.pt"
-else:
-    ACTIVE_NAMES = UNIVERSAL_NAMES
-    ACTIVE_COLOURS = UNIVERSAL_COLOURS
-    WEIGHTS_FILE = "space_invaders_best.pt"
+config = GAME_REGISTRY.get(CURRENT_GAME, {})
 
+
+WEIGHTS_FILE = f"{CURRENT_GAME}_YOLObest.pt"
+class_names = config.get("names_override", UNIVERSAL_NAMES)
+class_colours = config.get("colours_override", UNIVERSAL_COLOURS)
 
 script_dir = Path(__file__).parent
-saved_checkpoint = script_dir / "weights" / "space_invaders_best.pt"
+saved_checkpoint = script_dir / "weights" / WEIGHTS_FILE
 
 static_dir = "dataset/images/val"  # folder of pngs (static mode)
 static_output = "runs/yolov8n_inferences"
@@ -64,26 +61,6 @@ conf = 0.40  # confidence threshold
 iou_threshold = 0.50  # IoU threshold for RT-DETR
 img_size = 640
 device = 0 if torch.cuda.is_available() else "cpu"
-
-class_colours = {
-    0: (0,   255,   0),    # green       — player
-    1: (0,   0,   255),    # red         — enemy
-    2: (255, 165,   0),    # light blue  — player_projectile
-    3: (0,   215, 255),    # gold        — collectible
-    4: (219, 55,  170),    # purple      — structure
-    5: (180, 180, 180),    # gray        — neutral
-    6: (255, 255, 255),    # pure white  — enemy_projectile
-}
-
-class_names = {
-    0: "player",
-    1: "enemy",
-    2: "projectile",
-    3: "collectible",
-    4: "structure",
-    5: "neutral",
-    6: "enemy_projectile"
-}
 
 print(f"Loading checkpoint: {saved_checkpoint}")
 model = YOLO(saved_checkpoint)
@@ -137,7 +114,7 @@ elif mode == "live":
     import jaxatari
     from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
-    game_name = "spaceinvaders"  # replace with the game name of your choice
+    game_name = CURRENT_GAME
 
     print(f"Starting live JaxAtari game: {game_name}, press 'q' to quit")
     base_env = jaxatari.make(game_name)
