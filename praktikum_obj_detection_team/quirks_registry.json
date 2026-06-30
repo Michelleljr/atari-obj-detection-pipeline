@@ -2037,7 +2037,7 @@
                 "_raw_shape": null
             },
             "divers": {
-                "class_id": "REVIEW",
+                "class_id": 3,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
