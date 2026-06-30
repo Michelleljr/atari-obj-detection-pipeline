@@ -53,7 +53,7 @@ CLASS_KEYWORDS = [
     (3, ["collectible", "fruit", "child", "bell", "princess",
          "item", "coin", "rejuvenator", "energy_pod", "fish",
          "score_item", "kill_item", "prize", "chest", "key",
-         "power", "pellet", "letter", "target_word", "oxygen_line"]),
+         "power", "pellet", "letter", "target_word", "oxygen_line", "fuel_tank"]),
 
     # class 4 — structure
     (4, ["block", "platform", "ladder", "wall", "grid", "path",
@@ -61,7 +61,7 @@ CLASS_KEYWORDS = [
          "mountain", "lane_blocker", "road", "ice", "obstacle",
          "board", "cube", "bumper", "flipper", "plunger",
          "rollover", "hole", "spinner", "door", "portal",
-         "rope", "conveyor", "completed_rect", "walked", "barricade_health"]),
+         "rope", "conveyor", "completed_rect", "walked", "barricade_health", "house_tree", "dam_indicator"]),
 
     # class 5 — neutral
     (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",

@@ -1788,7 +1788,7 @@
                 "_raw_shape": null
             },
             "red_balls": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1801,7 +1801,7 @@
                 "_raw_shape": null
             },
             "purple_ball": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1814,7 +1814,7 @@
                 "_raw_shape": null
             },
             "snake": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1827,7 +1827,7 @@
                 "_raw_shape": null
             },
             "green_ball": {
-                "class_id": "REVIEW",
+                "class_id": 3,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1840,20 +1840,21 @@
                 "_raw_shape": null
             },
             "sam": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
-                "grid_origin_x": null,
-                "grid_origin_y": null,
-                "cell_w": null,
-                "cell_h": null,
-                "grid_cols": null,
-                "active_value": null,
-                "_raw_shape": null
+                "coordinate_mode": "pixel_color",
+                "origin_x": 94,
+                "origin_y": 43,
+                "horizontal_step": 16,
+                "vertical_step": 24,
+                "y_base": 2,
+                "obj_w": 8,
+                "obj_h": 13,
+                "x_offset": -4,
+                "y_offset": 1
             },
             "pyramid": {
-                "class_id": "REVIEW",
+                "class_id": 4,
                 "detected_type": "true_2d_grid",
                 "x_offset": null,
                 "y_offset": null,
@@ -1900,7 +1901,7 @@
                 "_raw_shape": null
             },
             "fuel_tanks": {
-                "class_id": "REVIEW",
+                "class_id": 3,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1926,7 +1927,7 @@
                 "_raw_shape": null
             },
             "house_trees": {
-                "class_id": "REVIEW",
+                "class_id": 4,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2003,7 +2004,7 @@
                 ]
             },
             "dam_indicator": {
-                "class_id": "REVIEW",
+                "class_id": 4,
                 "detected_type": "flat_per_row",
                 "x_offset": null,
                 "y_offset": null,
