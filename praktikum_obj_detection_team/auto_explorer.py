@@ -36,24 +36,25 @@ GLOBAL_CLASSES = {
 
 CLASS_KEYWORDS = [
     # class 0 — player
-    (0, ["player", "bailey", "chicken", "human", "hook"]),
+    (0, ["player", "bailey", "chicken", "human", "hook", "active_piece"]),
 
     # class 1 — enemy
     (1, ["enemy", "enemies", "otto", "bear", "shark", "spider",
          "centipede", "flea", "scorpion", "alien", "kong", "monkeys",
          "mothership", "byte_bat", "rock_muncher", "radar_mortar",
-         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser", "asteroids", "tentacles"]),
+         "kamikaze", "bouncer", "chasing", "ghost", "monster", "chaser", 
+         "asteroids", "tentacles", "dragon", "level_boss"]),
 
     # class 2 — projectile
     (2, ["bullet", "missile", "shot", "spell", "plasma",
-         "bomb", "laser", "torpedo", "fireball", "projectile",
+         "bomb", "laser", "torpedo", "fireball", "projectile", "projectiles",
          "detonator", "homing", "ball", "player_spell", "spear", "ball"]),
 
     # class 3 — collectible
     (3, ["collectible", "fruit", "child", "bell", "princess",
          "item", "coin", "rejuvenator", "energy_pod", "fish",
          "score_item", "kill_item", "prize", "chest", "key",
-         "power", "pellet", "letter", "target_word", "oxygen_line", "fuel_tank"]),
+         "power", "pellet", "letter", "target_word", "oxygen_line", "fuel_tank", "divers"]),
 
     # class 4 — structure
     (4, ["block", "platform", "ladder", "wall", "grid", "path",
@@ -61,11 +62,12 @@ CLASS_KEYWORDS = [
          "mountain", "lane_blocker", "road", "ice", "obstacle",
          "board", "cube", "bumper", "flipper", "plunger",
          "rollover", "hole", "spinner", "door", "portal",
-         "rope", "conveyor", "completed_rect", "walked", "barricade_health", "house_tree", "dam_indicator"]),
+         "rope", "conveyor", "completed_rect", "walked", "barricade_health", 
+         "house_tree", "dam_indicator", "star_base", "targets"]),
 
     # class 5 — neutral
     (5, ["truck", "car", "jet", "chopper", "cloud", "ufo",
-         "falling_rock", "meteoroid", "debris", "disc", "boat"]),
+         "falling_rock", "meteoroid", "debris", "disc", "boat", "ball", "next_piece", "ball"]),
 
     # class 6 - enemy_projectile
     (6,["enemy_bullets"])

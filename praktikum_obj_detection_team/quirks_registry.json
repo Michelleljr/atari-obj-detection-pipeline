@@ -2326,7 +2326,7 @@
                 "_raw_shape": null
             },
             "ball": {
-                "class_id": "REVIEW",
+                "class_id": 5,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
