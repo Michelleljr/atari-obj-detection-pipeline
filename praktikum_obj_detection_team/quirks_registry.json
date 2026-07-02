@@ -2360,7 +2360,7 @@
                 ]
             },
             "active_piece": {
-                "class_id": "REVIEW",
+                "class_id": 0,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2373,7 +2373,7 @@
                 "_raw_shape": null
             },
             "next_piece": {
-                "class_id": "REVIEW",
+                "class_id": 5,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2429,7 +2429,7 @@
                 "_raw_shape": null
             },
             "level_boss": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2474,8 +2474,8 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -2,
+                "y_offset": -2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2487,8 +2487,8 @@
             "enemies": {
                 "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -3,
+                "y_offset": -2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2500,8 +2500,8 @@
             "discs": {
                 "class_id": 5,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -1,
+                "y_offset": -1,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2513,8 +2513,8 @@
             "doors": {
                 "class_id": 4,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
+                "x_offset": -2,
+                "y_offset": -2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2700,7 +2700,7 @@
     "videopinball": {
         "objects": {
             "ball": {
-                "class_id": "REVIEW",
+                "class_id": 5,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2752,7 +2752,7 @@
                 "_raw_shape": null
             },
             "targets": {
-                "class_id": "REVIEW",
+                "class_id": 4,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
