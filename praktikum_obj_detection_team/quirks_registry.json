@@ -2530,8 +2530,8 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": -2,
-                "y_offset": -2,
+                "x_offset": 0,
+                "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2543,8 +2543,8 @@
             "enemies": {
                 "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": -1,
-                "y_offset": -1,
+                "x_offset": 1,
+                "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2569,7 +2569,7 @@
             "bullet": {
                 "class_id": 2,
                 "detected_type": "entity",
-                "x_offset": -1,
+                "x_offset": 0,
                 "y_offset": -1,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
