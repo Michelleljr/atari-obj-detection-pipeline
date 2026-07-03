@@ -1702,7 +1702,7 @@
                 "_raw_shape": null
             },
             "boss": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -2668,15 +2668,31 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": 0,
-                "grid_origin_x": null,
-                "grid_origin_y": null,
-                "cell_w": null,
-                "cell_h": null,
-                "grid_cols": null,
-                "active_value": null,
-                "_raw_shape": null
+
+                "pixel_play_x1": 20,
+                "pixel_play_x2": 145,
+                "pixel_play_y1": 22,
+                "pixel_play_y2": 190,
+
+                "pixel_search_left": 45,
+                "pixel_search_right": 45,
+                "pixel_search_up": 45,
+                "pixel_search_down": 75,
+
+                "pixel_rare_color_max_count": 400,
+                "pixel_min_component_area": 4,
+
+                "pixel_min_box_width": 3,
+                "pixel_max_box_width": 24,
+                "pixel_min_box_height": 5,
+                "pixel_max_box_height": 38,
+
+                "pixel_maximum_distance": 70,
+
+                "pixel_padding_left": 1,
+                "pixel_padding_right": 1,
+                "pixel_padding_top": 1,
+                "pixel_padding_bottom": 1
             },
             "cube_current_view": {
                 "class_id": 4,
