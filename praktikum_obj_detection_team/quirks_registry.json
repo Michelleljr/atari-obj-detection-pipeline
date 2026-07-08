@@ -270,7 +270,7 @@
                 "_raw_shape": null
             },
             "plasma": {
-                "class_id": 2,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -309,7 +309,7 @@
                 "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
-                "cell_w": null,
+                "cell_w": 10,
                 "cell_h": null,
                 "grid_cols": null,
                 "active_value": null,
@@ -329,7 +329,7 @@
                 "_raw_shape": null
             },
             "banks": {
-                "class_id": 4,
+                "class_id": 3,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -342,10 +342,10 @@
                 "_raw_shape": null
             },
             "dynamite": {
-                "class_id": "REVIEW",
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0,
+                "y_offset": -4,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -398,7 +398,7 @@
                 "_raw_shape": null
             },
             "enemy_shots": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -564,7 +564,7 @@
                 "_raw_shape": null
             },
             "player_bullet": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -590,7 +590,7 @@
                 "_raw_shape": null
             },
             "enemy_bullets": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -819,7 +819,7 @@
                 "_raw_shape": null
             },
             "enemy_missiles": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -832,7 +832,7 @@
                 "_raw_shape": null
             },
             "player_missiles": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1098,7 +1098,7 @@
                 "_raw_shape": null
             },
             "bombs": {
-                "class_id": 2,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1282,7 +1282,7 @@
                 "_raw_shape": null
             },
             "falling_coconut": {
-                "class_id": "REVIEW",
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1308,7 +1308,7 @@
                 "_raw_shape": null
             },
             "thrown_coconuts": {
-                "class_id": "REVIEW",
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1365,7 +1365,7 @@
                 "_raw_shape": null
             },
             "bombs": {
-                "class_id": 2,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": -12,
@@ -1395,7 +1395,7 @@
                 "_raw_shape": null
             },
             "player_missile": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1421,7 +1421,7 @@
                 "_raw_shape": null
             },
             "radar_mortar_missile": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1460,7 +1460,7 @@
                 "_raw_shape": null
             },
             "rock_muncher_missile": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1473,7 +1473,7 @@
                 "_raw_shape": null
             },
             "homing_missile": {
-                "class_id": 2,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
@@ -1489,7 +1489,7 @@
                 "class_id": 4,
                 "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0,
+                "y_offset": -30,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1512,7 +1512,7 @@
                 "_raw_shape": null
             },
             "detonator": {
-                "class_id": 2,
+                "class_id": 1,
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
