@@ -9,12 +9,12 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 10
-DEBUG_MODE     = True
+TARGET_FRAMES  = 1000
+DEBUG_MODE     = False
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-SINGLE_GAME_TARGET = "asteroids"
+TARGET_GAMES  = ["beamrider", "galaxian", "kingkong", "lasergates", "berzerk", "atlantis", "kangaroo", "bankheist", "choppercommand"]
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -273,11 +273,11 @@ def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
 
 
 
-games_to_run = list(QUIRKS_REGISTRY.keys()) if RUN_ALL_GAMES else [SINGLE_GAME_TARGET]
+games_to_run = list(QUIRKS_REGISTRY.keys()) if RUN_ALL_GAMES else TARGET_GAMES
 
 print("=" * 50)
 print(" DATA EXTRACTOR")
-print(f" Mode: {'ALL GAMES' if RUN_ALL_GAMES else SINGLE_GAME_TARGET.upper()}")
+print(f" Mode: {'ALL GAMES' if RUN_ALL_GAMES else f'BATCH ({len(TARGET_GAMES)} games)'}")
 print(f" Frames per game: {TARGET_FRAMES}")
 print(f" Debug overlay: {DEBUG_MODE}")
 print("=" * 50)
@@ -330,9 +330,14 @@ for game_name in games_to_run:
         frames_since_save = 0
 
         while saved_count < TARGET_FRAMES and frames_since_save < MAX_IDLE_FRAMES:
-            rng, action_key = jax.random.split(rng)
-            action = jax.random.randint(action_key, shape=(),
-                                        minval=0, maxval=env.action_space().n)
+            rng, action_key, chance_key = jax.random.split(rng, 3)
+            roll = float(jax.random.uniform(chance_key))
+
+            if roll < 0.50:
+                action = 1
+            else:
+                action = jax.random.randint(action_key, shape=(),
+                                            minval=0, maxval=env.action_space().n)
 
             current_obs, state, reward, stopped, truncated, info = env.step(state, action)
             frame_count       += 1
@@ -386,7 +391,9 @@ for game_name in games_to_run:
                     base = f"{output_folder}/frame_{saved_count:05d}"
                     with open(f"{base}.txt", "w") as f:
                         f.write("\n".join(yolo_lines))
-                    cv2.imwrite(f"{base}.png", frame_bgr)
+                        # Upscale by 4x to fix sprites of 1x1
+                        frame_bgr = cv2.resize(frame_bgr, (640, 840), interpolation=cv2.INTER_NEAREST)
+                        cv2.imwrite(f"{base}.png", frame_bgr)
                     saved_count       += 1
                     frames_since_save  = 0
                     print(f"  [{saved_count:>4}/{TARGET_FRAMES}] "
