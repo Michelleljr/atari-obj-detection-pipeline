@@ -46,9 +46,8 @@ CLASS_KEYWORDS = [
          "asteroids", "tentacles", "dragon", "level_boss"]),
 
     # class 2 — projectile
-    (2, ["bullet", "missile", "shot", "spell", "plasma",
-         "bomb", "laser", "torpedo", "fireball", "projectile", "projectiles",
-         "detonator", "homing", "ball", "player_spell", "spear", "ball"]),
+    (2, ["player_bullet", "player_missile", "player_shot", "player_spell", "player_projectile",
+         "spell", "laser", "torpedo", "fireball", "detonator", "spear", "dynamite"]),
 
     # class 3 — collectible
     (3, ["collectible", "fruit", "child", "bell", "princess",
@@ -70,7 +69,9 @@ CLASS_KEYWORDS = [
          "falling_rock", "meteoroid", "debris", "disc", "boat", "ball", "next_piece", "ball"]),
 
     # class 6 - enemy_projectile
-    (6,["enemy_bullets"])
+    (6, ["enemy_bullet", "enemy_bullets", "enemy_shot", "enemy_shots", "enemy_missile", "enemy_missiles",
+         "plasma", "bomb", "bombs", "homing_missile", "radar_mortar_missile", "rock_muncher_missile",
+         "coconut", "coconuts"])
 ]
 
 
