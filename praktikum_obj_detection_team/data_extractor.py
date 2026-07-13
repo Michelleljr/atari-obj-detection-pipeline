@@ -14,7 +14,7 @@ DEBUG_MODE     = False
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-TARGET_GAMES  = ["beamrider", "galaxian", "kingkong", "lasergates", "berzerk", "atlantis", "kangaroo", "bankheist", "choppercommand"]
+TARGET_GAMES  = ["montezumarevenge","mspacman","namethisgame" ,"pheonix", "pong"]
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -242,18 +242,19 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
             car_h = y_max - y_min
 
             # Map directly to class 0 (Player)
-            yolo_lines.append(to_yolo(0, car_x, y_min, car_w, car_h))
+            patch_h, patch_w = pixels.shape[:2]
+            yolo_lines.append(to_yolo(0, car_x, y_min, car_w, car_h, patch_h, patch_w))
 
             if DEBUG_MODE:
                 draw_debug_box(frame_bgr, car_x, y_min, car_w, car_h,
                                0, "entity", "player_car")
         # TODO: any future games with same issue
 
-def to_yolo(class_id, x, y, w, h):
-    xc = min((x + w / 2.0) / SCREEN_W, 1.0)
-    yc = min((y + h / 2.0) / SCREEN_H, 1.0)
-    wn = min(w / SCREEN_W, 1.0)
-    hn = min(h / SCREEN_H, 1.0)
+def to_yolo(class_id, x, y, w, h, actual_h, actual_w):
+    xc = min((x + w / 2.0) / actual_w, 1.0)
+    yc = min((y + h / 2.0) / actual_h, 1.0)
+    wn = min(w / actual_w, 1.0)
+    hn = min(h / actual_h, 1.0)
     return f"{class_id} {xc:.6f} {yc:.6f} {wn:.6f} {hn:.6f}"
 
 def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
@@ -348,6 +349,8 @@ for game_name in games_to_run:
                 pixels    = np.array(image_stack[0])
                 frame_bgr = cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
 
+                actual_h, actual_w = pixels.shape[:2]
+
                 objects_dict = (obs_stack._asdict() if hasattr(obs_stack, '_asdict')
                                 else obs_stack.__dict__)
 
@@ -380,7 +383,7 @@ for game_name in games_to_run:
                             continue
 
                     for (x, y, w, h) in boxes:
-                        yolo_lines.append(to_yolo(class_id, x, y, w, h))
+                        yolo_lines.append(to_yolo(class_id, x, y, w, h, actual_h, actual_w))
                         if DEBUG_MODE:
                             draw_debug_box(frame_bgr, x, y, w, h,
                                            class_id, obj_type, obj_name)
