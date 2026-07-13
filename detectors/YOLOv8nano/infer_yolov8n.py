@@ -18,8 +18,8 @@ from ultralytics import YOLO
 import torch
 import jax
 
-CURRENT_GAME = "asteroids"
-mode = "live"  # switch between already captured frames detections and live game detections [static/live]
+CURRENT_GAME = "frostbite"
+mode = "manual"  # switch between already captured frames detections and live game detections [static/live/manual]
 
 UNIVERSAL_NAMES = {
     0: "player", 1: "enemy", 2: "projectile", 3: "collectible",
@@ -48,7 +48,7 @@ GAME_REGISTRY = {
 config = GAME_REGISTRY.get(CURRENT_GAME, {})
 
 
-WEIGHTS_FILE = f"{CURRENT_GAME}_YOLObest.pt"
+WEIGHTS_FILE = f"{CURRENT_GAME}.pt"
 class_names = config.get("names_override", UNIVERSAL_NAMES)
 class_colours = config.get("colours_override", UNIVERSAL_COLOURS)
 
@@ -57,8 +57,8 @@ saved_checkpoint = script_dir / "weights" / WEIGHTS_FILE
 
 static_dir = "dataset/images/val"  # folder of pngs (static mode)
 static_output = "runs/yolov8n_inferences"
-conf = 0.40  # confidence threshold
-iou_threshold = 0.50  # IoU threshold for RT-DETR
+conf = 0.40 # confidence threshold
+iou_threshold = 0.50 # IoU threshold for RT-DETR
 img_size = 640
 device = 0 if torch.cuda.is_available() else "cpu"
 
@@ -168,3 +168,79 @@ elif mode == "live":
 
     cv2.destroyAllWindows()
     print("Live session ended.")
+
+
+elif mode == "manual":
+    import jaxatari
+    from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
+    import jax.numpy as jnp
+
+    game_name = CURRENT_GAME
+    print(f"\n🎮 MANUAL CONTROL MODE STARTED: {game_name.upper()}")
+    print("Controls:")
+    print("  W / Up    -> Move UP")
+    print("  S / Down  -> Move DOWN")
+    print("  A / Left  -> Move LEFT")
+    print("  D / Right -> Move RIGHT")
+    print("  Spacebar  -> FIRE")
+    print("  Q         -> Quit Game\n")
+
+    base_env = jaxatari.make(game_name)
+    atari_env = AtariWrapper(base_env)
+    env = PixelAndObjectObsWrapper(atari_env)
+
+    KEY_MAPPING = {
+        ord("w"): 2, 82: 2,  # 'w' or Up Arrow
+        ord("s"): 5, 84: 5,  # 's' or Down Arrow
+        ord("a"): 4, 81: 4,  # 'a' or Left Arrow
+        ord("d"): 3, 83: 3,  # 'd' or Right Arrow
+        32: 1,  # Spacebar (FIRE)
+    }
+
+    rng = jax.random.PRNGKey(0)
+    rng, reset_key = jax.random.split(rng)
+    current_obs, state = env.reset(reset_key)
+
+    frame_count = 0
+    infer_frames = 3
+    last_annotated = None
+    my_window_name = "YOLOv8 Inference - Manual Play"
+
+    cv2.namedWindow(my_window_name)
+
+    while True:
+        frame_count += 1
+
+        image_stack, _ = current_obs
+        pixels = np.array(image_stack[-1])
+        frame_bgr = cv2.cvtColor(pixels, cv2.COLOR_RGB2BGR)
+        display = cv2.resize(frame_bgr, (480, 630), interpolation=cv2.INTER_NEAREST)
+
+        if frame_count % infer_frames == 0:
+            results_big = model.predict(display, imgsz=img_size,
+                                        conf=conf, iou=iou_threshold,
+                                        device=device, verbose=False)
+            last_annotated = draw_boxes(display, results_big[0])
+
+        if last_annotated is not None:
+            cv2.imshow(my_window_name, last_annotated)
+        else:
+            cv2.imshow(my_window_name, display)
+
+        key = cv2.waitKey(30) & 0xFF
+
+        if key == ord("q"):
+            break
+
+        action_int = KEY_MAPPING.get(key, 0)
+        action = jnp.array(action_int, dtype=jnp.int32)
+
+        current_obs, state, reward, stopped, truncated, info = env.step(state, action)
+
+        if stopped or truncated:
+            print("Game Over! Resetting environment...")
+            rng, reset_key = jax.random.split(rng)
+            current_obs, state = env.reset(reset_key)
+
+    cv2.destroyAllWindows()
+    print("Manual session ended.")
