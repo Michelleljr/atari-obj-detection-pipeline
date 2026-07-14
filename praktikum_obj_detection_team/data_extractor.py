@@ -14,7 +14,9 @@ DEBUG_MODE     = False
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-TARGET_GAMES  = ["montezumarevenge","mspacman","namethisgame" ,"pheonix", "pong"]
+#TARGET_GAMES  = ["phoenix", "mspacman"]
+#TARGET_GAMES = ["phoenix"]
+TARGET_GAMES = ["mspacman"]
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -248,7 +250,48 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
             if DEBUG_MODE:
                 draw_debug_box(frame_bgr, car_x, y_min, car_w, car_h,
                                0, "entity", "player_car")
-        # TODO: any future games with same issue
+    elif game_name == "mspacman":
+        patch_h, patch_w = pixels.shape[:2]
+        # ----------------------------------------mspacman detection-----------------------------------------------------
+        player_color = np.array([210, 164, 74])
+        lower_p = np.clip(player_color - 25, 0, 255)
+        upper_p = np.clip(player_color + 25, 0, 255)
+        p_mask = cv2.inRange(pixels, lower_p, upper_p)
+
+        p_contours, _ = cv2.findContours(p_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in p_contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+            if 4 <= w <= 16 and 4 <= h <= 16 and y < 176:
+                yolo_lines.append(to_yolo(0, x, y, w, h, patch_h, patch_w))
+                if DEBUG_MODE:
+                    draw_debug_box(frame_bgr, x, y, w, h, 0, "entity", "player_cv")
+
+        #----------------------------------------pellet detection -----------------------------------------------------
+        palette_colors = [
+            np.array([210, 164, 116]),
+            np.array([228, 111, 111]),
+            np.array([200, 200, 80]),
+            np.array([214, 214, 214])
+        ]
+
+        combined_pellet_mask = np.zeros(pixels.shape[:2], dtype=np.uint8)
+
+        for color in palette_colors:
+            # We can keep the tolerance tight (15) because your color is exactly right!
+            lower = np.clip(color - 15, 0, 255)
+            upper = np.clip(color + 15, 0, 255)
+            mask = cv2.inRange(pixels, lower, upper)
+            combined_pellet_mask = cv2.bitwise_or(combined_pellet_mask, mask)
+
+        pel_contours, _ = cv2.findContours(combined_pellet_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for cnt in pel_contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            if 2 <= w <= 12 and 1 <= h <= 6 and y < 176:
+                yolo_lines.append(to_yolo(3, x, y, w, h, patch_h, patch_w))
+                if DEBUG_MODE:
+                    draw_debug_box(frame_bgr, x, y, w, h, 3, "entity", "pellet_cv")
 
 def to_yolo(class_id, x, y, w, h, actual_h, actual_w):
     xc = min((x + w / 2.0) / actual_w, 1.0)

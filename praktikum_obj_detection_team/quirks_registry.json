@@ -1663,10 +1663,12 @@
                 "_raw_shape": null
             },
             "player_projectile": {
-                "class_id": 0,
+                "class_id": 2,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -2,
                 "y_offset": 0,
+                "w_padding": 1,
+                "h_padding": 9,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1676,10 +1678,10 @@
                 "_raw_shape": null
             },
             "enemy_projectiles": {
-                "class_id": 1,
+                "class_id": 6,
                 "detected_type": "entity",
                 "x_offset": 0,
-                "y_offset": 0,
+                "y_offset": -2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1693,6 +1695,8 @@
                 "detected_type": "entity",
                 "x_offset": 0,
                 "y_offset": 0,
+                "w_padding": 2,
+                "h_padding": 2,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -2984,21 +2988,10 @@
             },
             "pellets": {
                 "class_id": 3,
-                "detected_type": "true_2d_grid",
-                "x_offset": null,
-                "y_offset": null,
-                "grid_origin_x": 0,
-                "grid_origin_y": 0,
-                "cell_w": 8,
-                "cell_h": 8,
-                "grid_cols": 14,
-                "active_value": 1.0,
-                "_raw_shape": [
-                    4,
-                    18,
-                    14
-                ]
+                "detected_type": "static_entity",
+                "static_boxes": []
             },
+
             "power_pellets": {
                 "class_id": 3,
                 "detected_type": "slot_flags",
