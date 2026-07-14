@@ -15,8 +15,7 @@ DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
 #TARGET_GAMES  = ["phoenix", "mspacman"]
-#TARGET_GAMES = ["phoenix"]
-TARGET_GAMES = ["mspacman"]
+TARGET_GAMES = ["phoenix"]
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -292,6 +291,36 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
                 yolo_lines.append(to_yolo(3, x, y, w, h, patch_h, patch_w))
                 if DEBUG_MODE:
                     draw_debug_box(frame_bgr, x, y, w, h, 3, "entity", "pellet_cv")
+
+    elif game_name == "phoenix":
+        patch_h, patch_w = pixels.shape[:2]
+
+        #-----------------------------shield-------------------------------------------------
+        lower_s = np.array([200, 200, 200])
+        upper_s = np.array([255, 255, 255])
+        s_mask = cv2.inRange(pixels, lower_s, upper_s)
+
+        s_contours, _ = cv2.findContours(s_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in s_contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+            if 14 <= w <= 40 and 14 <= h <= 40 and y > 150:
+                yolo_lines.append(to_yolo(4, x, y, w, h, patch_h, patch_w))
+                if DEBUG_MODE:
+                    draw_debug_box(frame_bgr, x, y, w, h, 4, "entity", "shield_cv")
+
+        #---------------------enemy_projectile--------------------------------------------------
+        ep_lower = np.array([200, 200, 200])
+        ep_upper = np.array([255, 255, 255])
+        ep_mask = cv2.inRange(pixels, ep_lower, ep_upper)
+
+        ep_contours, _ = cv2.findContours(ep_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in ep_contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            if w <= 4 and 3 <= h <= 15 and y > 25:
+                yolo_lines.append(to_yolo(6, x, y, w, h, patch_h, patch_w))
+                if DEBUG_MODE:
+                    draw_debug_box(frame_bgr, x, y, w, h, 6, "entity", "enemy_proj_cv")
 
 def to_yolo(class_id, x, y, w, h, actual_h, actual_w):
     xc = min((x + w / 2.0) / actual_w, 1.0)

@@ -1665,10 +1665,9 @@
             "player_projectile": {
                 "class_id": 2,
                 "detected_type": "entity",
-                "x_offset": -2,
+                "x_offset": -1,
                 "y_offset": 0,
-                "w_padding": 1,
-                "h_padding": 9,
+                "h_padding": 6,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1677,19 +1676,13 @@
                 "active_value": null,
                 "_raw_shape": null
             },
+
             "enemy_projectiles": {
-                "class_id": 6,
-                "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": -2,
-                "grid_origin_x": null,
-                "grid_origin_y": null,
-                "cell_w": null,
-                "cell_h": null,
-                "grid_cols": null,
-                "active_value": null,
-                "_raw_shape": null
+            "class_id": 6,
+            "detected_type": "static_entity",
+            "static_boxes": []
             },
+
             "enemies": {
                 "class_id": 1,
                 "detected_type": "entity",
@@ -1738,8 +1731,8 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 1,
-                "y_offset": 1,
+                "x_offset": 0,
+                "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1751,8 +1744,8 @@
             "enemy": {
                 "class_id": 1,
                 "detected_type": "entity",
-                "x_offset": 1,
-                "y_offset": 1,
+                "x_offset": 0,
+                "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
@@ -1764,8 +1757,8 @@
             "ball": {
                 "class_id": 2,
                 "detected_type": "entity",
-                "x_offset": 1,
-                "y_offset": 1,
+                "x_offset": 0,
+                "y_offset": 0,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
                 "cell_w": null,
