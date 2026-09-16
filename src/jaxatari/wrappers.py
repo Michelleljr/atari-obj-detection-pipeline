@@ -8,15 +8,19 @@ from typing import Any, Dict, Tuple, Union, Optional, Callable
 from dataclasses import is_dataclass, asdict
 
 import chex
+import cv2
 from flax import struct
 import jax
 import jax.image as jim
 import jax.numpy as jnp
 from jax import flatten_util
+import torch
 from jaxatari.environment import EnvState, JAXAtariAction as Action
 import jaxatari.spaces as spaces
 import numpy as np
 from jaxatari.rendering.jax_rendering_utils import RendererConfig
+
+from ultralytics import YOLO
 
 class JaxatariWrapper(object):
     """Base class for JAXAtark wrappers."""
@@ -341,6 +345,504 @@ class ObjectCentricWrapper(JaxatariWrapper):
 
         info_dict = {k: reduce_info(k, v) for k, v in infos.items()}
         return obs_stack, oc_state, reward, terminated, truncated, info_dict
+
+class YOLOObjectCentricWrapper:
+    def __init__(self, env, yolo_model_path, class_map, num_features,
+                 frame_stack_size=4, frame_skip=4, conf_threshold=0.40,
+                 imgsz=640, iou_threshold=0.50, display_size=(480, 630)):
+        self._env = env
+        self.frame_stack_size = frame_stack_size
+        self.frame_skip = frame_skip
+        self.num_features = num_features
+        self.conf_threshold = conf_threshold
+        self.imgsz = imgsz
+        self.iou_threshold = iou_threshold
+        self.display_size = display_size
+        self.class_map = class_map
+        self.device = 0 if torch.cuda.is_available() else "cpu"
+
+        self.model = YOLO(yolo_model_path)
+        self.model.to(self.device)
+
+        self._obs_stack = None
+        self.last_frame = None     # BGR, upscaled — for display
+        self.last_results = None   # raw ultralytics result — for draw_boxes()
+
+    # def _prep_frame(self, pixel_obs_last):
+    #     frame_rgb = np.array(pixel_obs_last)
+    #     frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+    #     return cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+
+    def _detections_to_flat_obs(self, frame_bgr):
+        results = self.model.predict(frame_bgr, imgsz=self.imgsz, conf=self.conf_threshold,
+                                    iou=self.iou_threshold, device=self.device, verbose=False)[0]
+        self.last_results = results
+
+        flat = np.zeros(self.num_features, dtype=np.float32)
+        instance_counts = {cls: 0 for cls in self.class_map}  # reset each frame
+
+        # Sort by confidence so the highest-confidence detections claim slots first
+        boxes = sorted(results.boxes, key=lambda b: float(b.conf.item()), reverse=True)
+
+        for box in boxes:
+            cls = int(box.cls.item())
+            conf = float(box.conf.item())
+            if conf < self.conf_threshold or cls not in self.class_map:
+                continue
+
+            slot_start, slot_size, max_instances = self.class_map[cls]
+            idx = instance_counts[cls]
+            if idx >= max_instances:
+                continue  # no free slot left for this class this frame
+
+            offset = slot_start + idx * slot_size
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+            x, y = (x1 + x2) / 2, (y1 + y2) / 2
+            w, h = x2 - x1, y2 - y1
+            flat[offset:offset + min(slot_size, 5)] = [x, y, w, h, 1.0]
+            instance_counts[cls] += 1
+
+        return flat
+
+    def _prep_frame(self, image_stack):
+        frame_rgb = np.array(image_stack[-1])
+        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+        return cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+
+    def reset(self, key):
+        pixel_obs, state = self._env.reset(key)
+        image_stack, _object_obs = pixel_obs          # unpack the tuple
+        self.last_frame = self._prep_frame(image_stack)
+        flat = self._detections_to_flat_obs(self.last_frame)
+        self._obs_stack = np.stack([flat] * self.frame_stack_size)
+        return jnp.array(self._obs_stack), state
+
+    def step(self, state, action):
+        pixel_obs, new_state, reward, terminated, truncated, info = self._env.step(state, action)
+        image_stack, _object_obs = pixel_obs          # unpack the tuple
+        self.last_frame = self._prep_frame(image_stack)
+        flat = self._detections_to_flat_obs(self.last_frame)
+        self._obs_stack = np.concatenate([self._obs_stack[1:], flat[np.newaxis]], axis=0)
+        return jnp.array(self._obs_stack), new_state, reward, terminated, truncated, info
+
+class DinoV2ObjectCentricWrapper:
+    """
+    Drop-in replacement for ObjectCentricWrapper that uses zero-shot DINOv2
+    attention-map detection instead of ground-truth game state or a trained model.
+
+    Detection approach
+    ------------------
+    DINOv2's CLS-token self-attention maps are used to identify the most salient
+    image patches.  The thresholded attention map is segmented with connected-
+    component analysis to produce bounding boxes.  The ``max_objects``
+    highest-salience regions are assigned to consecutive slots in order of
+    salience (slot 0 = most salient).  No labels or prior knowledge about the
+    game are required.
+
+    Output format
+    -------------
+    Identical to ``YOLOObjectCentricWrapper``:
+    ``(frame_stack_size, num_features)`` float32 array where each detected object
+    occupies a slot of five values ``[x_centre, y_centre, width, height, confidence]``.
+
+    Parameters
+    ----------
+    env :
+        AtariWrapper-wrapped base env.  Wrapping in ``PixelObsWrapper`` first is
+        the most convenient setup (pixel frames come back from ``step`` directly),
+        but a bare ``AtariWrapper`` env also works via the env's ``render()`` method.
+    num_features : int
+        Total length of the flat feature vector per frame.
+        Must be at least ``max_objects * 5``.
+    frame_stack_size : int
+        Number of consecutive observations to stack (default 4).
+    frame_skip : int
+        Number of AtariWrapper steps per ``step()`` call (default 4).
+        Only the last frame is used for detection.
+    dino_model_name : str
+        HuggingFace model identifier for DINOv2
+        (default ``"facebook/dinov2-base"``).
+    attention_head_fusion : str
+        How to combine multi-head attention maps.
+        One of ``"mean"`` (default), ``"min"``, ``"max"``.
+    attention_threshold : float
+        Fraction of the maximum attention value used as the binary foreground
+        threshold (default ``0.6``).  Higher → smaller, more precise masks.
+    max_objects : int
+        Maximum number of salient regions to detect (default 5).
+    class_map : dict, optional
+        ``{region_index: (slot_start, slot_size)}`` where region 0 is the most
+        salient object.  If *None* a default layout is built automatically:
+        region ``i`` → slot starting at ``i * 5``, size 5.
+    device : str or None
+        Torch device string (e.g. ``"cuda"``, ``"cpu"``).  Auto-detected when
+        *None* (default).
+    clip_reward : bool
+        Clip reward to ``{-1, 0, +1}`` via ``sign`` (default ``True``).
+
+    Example
+    -------
+    ::
+
+        from jaxatari.wrappers import AtariWrapper, DinoV2ObjectCentricWrapper
+        import jaxatari, jax
+
+        env = DinoV2ObjectCentricWrapper(
+            AtariWrapper(jaxatari.make("pong")),
+            num_features=25,   # 5 objects × 5 features
+            max_objects=5,
+        )
+        obs, state = env.reset(jax.random.PRNGKey(0))
+        # obs.shape == (4, 25)
+    """
+
+    # ------------------------------------------------------------------ #
+    #  Construction                                                        #
+    # ------------------------------------------------------------------ #
+
+    def __init__(
+        self,
+        env,
+        num_features: int,
+        frame_stack_size: int = 4,
+        frame_skip: int = 4,
+        dino_model_name: str = "facebook/dinov2-base",
+        attention_head_fusion: str = "mean",
+        attention_threshold: float = 0.6,
+        max_objects: int = 5,
+        class_map: Optional[dict] = None,
+        device: Optional[str] = None,
+        clip_reward: bool = True,
+    ):
+        self._env = env
+        self.num_features = num_features
+        self.frame_stack_size = frame_stack_size
+        self.frame_skip = frame_skip
+        self.attention_head_fusion = attention_head_fusion
+        self.attention_threshold = attention_threshold
+        self.max_objects = max_objects
+        self.clip_reward = clip_reward
+
+        # Resolve torch device
+        import torch
+        self._device = "cuda" if (device is None and torch.cuda.is_available()) else (device or "cpu")
+
+        # Build default class_map if none provided: region i → slot i*5, size 5
+        self.class_map: dict = class_map if class_map is not None else {
+            i: (i * 5, 5) for i in range(max_objects)
+        }
+
+        self._load_dino(dino_model_name)
+
+        self._obs_shape = (self.frame_stack_size, self.num_features)
+
+    # ------------------------------------------------------------------ #
+    #  Model loading                                                       #
+    # ------------------------------------------------------------------ #
+
+    def _load_dino(self, model_name: str) -> None:
+        """Load DINOv2 from HuggingFace Transformers and register an attention hook."""
+        try:
+            from transformers import AutoImageProcessor, AutoModel
+        except ImportError as exc:
+            raise ImportError(
+                "The 'transformers' package is required for DinoV2ObjectCentricWrapper. "
+                "Install it with:  pip install transformers"
+            ) from exc
+
+        self._dino_processor = AutoImageProcessor.from_pretrained(model_name)
+        self._dino_model = AutoModel.from_pretrained(model_name).to(self._device)
+        self._dino_model.eval()
+
+        # Patch size from config (14 px for ViT-B/14)
+        self._patch_size: int = self._dino_model.config.patch_size
+
+        # Attention weights from the last encoder layer, populated by a forward hook
+        self._last_attention: Optional[np.ndarray] = None
+
+        def _hook(module, inputs, output):
+            # output shape: (batch, num_heads, seq_len, seq_len)
+            self._last_attention = output.detach().cpu().float().numpy()
+
+        self._dino_model.encoder.layer[-1].attention.attention.register_forward_hook(_hook)
+
+    # ------------------------------------------------------------------ #
+    #  Detection                                                           #
+    # ------------------------------------------------------------------ #
+
+    def _attention_to_boxes(
+        self, frame_rgb: np.ndarray
+    ) -> list:
+        """
+        Run DINOv2 on *frame_rgb* (H×W×3 uint8) and return a list of up to
+        ``self.max_objects`` detections, each as
+        ``(x_centre, y_centre, width, height, confidence)`` in pixel coords,
+        sorted by descending confidence (= normalised attention mass).
+        """
+        import torch
+        from PIL import Image
+        import cv2  # used for connected components
+
+        img_h, img_w = frame_rgb.shape[:2]
+        pil_img = Image.fromarray(frame_rgb)
+
+        inputs = self._dino_processor(images=pil_img, return_tensors="pt")
+        inputs = {k: v.to(self._device) for k, v in inputs.items()}
+
+        with torch.no_grad():
+            # The hook fires inside this call and stores the attention weights
+            _ = self._dino_model(**inputs, output_attentions=True)
+
+        attn = self._last_attention  # (1, num_heads, seq_len, seq_len)
+        if attn is None:
+            return []
+
+        # Number of patches along each spatial axis
+        # seq_len = 1 (CLS) + num_patches  →  num_patches = seq_len - 1
+        seq_len = attn.shape[-1]
+        num_patches = seq_len - 1
+
+        # Infer spatial grid from the preprocessed image size
+        # The processor typically resizes to multiples of patch_size
+        proc_h = inputs["pixel_values"].shape[-2]
+        proc_w = inputs["pixel_values"].shape[-1]
+        grid_h = proc_h // self._patch_size
+        grid_w = proc_w // self._patch_size
+
+        # Robustly handle cases where the number of patches doesn't perfectly
+        # tile (e.g. due to padding).  Clamp to what the attention map has.
+        if grid_h * grid_w > num_patches:
+            grid_h = int(num_patches ** 0.5)
+            grid_w = num_patches // grid_h
+
+        # Extract CLS→patch attention (row 0, columns 1…)
+        # Shape: (num_heads, num_patches)
+        cls_attn = attn[0, :, 0, 1: grid_h * grid_w + 1]  # (heads, grid_h*grid_w)
+
+        # Fuse across heads
+        if self.attention_head_fusion == "mean":
+            patch_attn = cls_attn.mean(axis=0)
+        elif self.attention_head_fusion == "min":
+            patch_attn = cls_attn.min(axis=0)
+        else:  # "max"
+            patch_attn = cls_attn.max(axis=0)
+
+        # Reshape to spatial grid
+        patch_attn = patch_attn[: grid_h * grid_w].reshape(grid_h, grid_w)
+
+        # Normalise to [0, 1] for thresholding
+        attn_min, attn_max = patch_attn.min(), patch_attn.max()
+        if attn_max - attn_min > 1e-8:
+            patch_attn = (patch_attn - attn_min) / (attn_max - attn_min)
+        else:
+            return []
+
+        # Binary foreground mask
+        mask = (patch_attn >= self.attention_threshold).astype(np.uint8)
+
+        # Connected components → one box per connected region
+        num_labels, label_map, stats, _ = cv2.connectedComponentsWithStats(
+            
+        )
+
+        detections = []
+        for label in range(1, num_labels):  # 0 is background
+            x_patch = stats[label, cv2.CC_STAT_LEFT]
+            y_patch = stats[label, cv2.CC_STAT_TOP]
+            w_patch = stats[label, cv2.CC_STAT_WIDTH]
+            h_patch = stats[label, cv2.CC_STAT_HEIGHT]
+
+            # Convert patch coordinates → pixel coordinates
+            scale_x = img_w / grid_w
+            scale_y = img_h / grid_h
+            x1 = x_patch * scale_x
+            y1 = y_patch * scale_y
+            x2 = (x_patch + w_patch) * scale_x
+            y2 = (y_patch + h_patch) * scale_y
+
+            x_c = (x1 + x2) / 2
+            y_c = (y1 + y2) / 2
+            w_px = x2 - x1
+            h_px = y2 - y1
+
+            # Confidence ≈ normalised total attention mass of the region
+            region_mask = (label_map == label)
+            conf = float(patch_attn[region_mask].mean())
+
+            detections.append((x_c, y_c, w_px, h_px, conf))
+
+        # Sort by confidence descending, keep top-max_objects
+        detections.sort(key=lambda d: d[4], reverse=True)
+        return detections[: self.max_objects]
+
+    def _detections_to_flat_obs(self, frame_np: np.ndarray) -> np.ndarray:
+        """
+        Run DINOv2 attention detection on *frame_np* (H×W×3 uint8) and return a
+        float32 vector of length ``self.num_features`` with each detection written
+        into its assigned slot as ``[x, y, w, h, confidence]``.
+        """
+        flat = np.zeros(self.num_features, dtype=np.float32)
+        detections = self._attention_to_boxes(frame_np)
+        for region_idx, (x, y, w, h, conf) in enumerate(detections):
+            if region_idx not in self.class_map:
+                continue
+            slot_start, slot_size = self.class_map[region_idx]
+            values = np.array([x, y, w, h, conf], dtype=np.float32)
+            fill_len = min(slot_size, 5)
+            if slot_start + fill_len <= self.num_features:
+                flat[slot_start: slot_start + fill_len] = values[:fill_len]
+        return flat
+
+    # ------------------------------------------------------------------ #
+    #  Pixel-frame extraction                                              #
+    # ------------------------------------------------------------------ #
+
+    def _get_frame(self, pixel_obs_or_state) -> np.ndarray:
+        """
+        Extract the latest RGB frame as a numpy uint8 array (H×W×3).
+
+        Works whether the inner env returns ``(frame_stack, H, W, C)`` pixel
+        obs directly (when wrapped in ``PixelObsWrapper``) or just plain
+        ``AtariState``.
+        """
+        if isinstance(pixel_obs_or_state, (np.ndarray, jnp.ndarray)):
+            # pixel_obs has shape (frame_stack, H, W, C)
+            arr = np.array(pixel_obs_or_state)
+            if arr.ndim == 4:
+                return arr[-1].astype(np.uint8)
+            return arr.astype(np.uint8)
+        # Fallback: render via the env directly (AtariState)
+        from jaxatari.wrappers import AtariWrapper
+        if hasattr(self._env, "render"):
+            return np.array(self._env.render(pixel_obs_or_state.env_state)).astype(np.uint8)
+        raise RuntimeError(
+            "Could not extract a pixel frame from the environment output. "
+            "Wrap the environment in PixelObsWrapper before DinoV2ObjectCentricWrapper, "
+            "or use an env that exposes a render() method."
+        )
+
+    # ------------------------------------------------------------------ #
+    #  Public env interface                                                #
+    # ------------------------------------------------------------------ #
+
+    def observation_space(self) -> spaces.Box:
+        """Returns a Box space of shape ``(frame_stack_size, num_features)``."""
+        return spaces.Box(
+            low=0.0,
+            high=np.inf,
+            shape=self._obs_shape,
+            dtype=np.float32,
+        )
+
+    def action_space(self):
+        """Delegates to the inner environment."""
+        return self._env.action_space()
+
+    # Proxy unknown attributes to the inner env (mirrors JaxatariWrapper)
+    def __getattr__(self, name: str):
+        return getattr(self._env, name)
+
+    def reset(self, key: chex.PRNGKey) -> Tuple[np.ndarray, Any]:
+        """
+        Reset the environment and return an initial stacked observation.
+
+        Returns
+        -------
+        obs_stack : np.ndarray of shape ``(frame_stack_size, num_features)``
+        state : env state (passed through from the inner env)
+        """
+        pixel_obs, state = self._env.reset(key)
+        frame = self._get_frame(pixel_obs)
+        flat = self._detections_to_flat_obs(frame)
+        obs_stack = np.stack([flat] * self.frame_stack_size)  # (stack, features)
+        return jnp.array(obs_stack), state
+
+    def step(
+        self, state: Any, action: int
+    ) -> Tuple[np.ndarray, Any, float, bool, bool, Dict[str, Any]]:
+        """
+        Step the environment ``frame_skip`` times and return a detection-based
+        stacked observation.
+
+        The inner ``step`` is called ``frame_skip`` times; only the pixel frame
+        from the *last* sub-step is used for detection.  Rewards are summed and
+        optionally clipped to ``{-1, 0, +1}``.
+
+        Returns
+        -------
+        obs_stack : jnp.ndarray of shape ``(frame_stack_size, num_features)``
+        new_state : env state
+        reward    : float
+        terminated : bool
+        truncated  : bool
+        info      : dict
+        """
+        # Execute frame_skip inner steps, collecting rewards & done flags
+        pixel_obs = None
+        new_state = state
+        total_reward = 0.0
+        terminated = False
+        truncated = False
+        info: Dict[str, Any] = {}
+
+        for _ in range(self.frame_skip):
+            pixel_obs, new_state, reward, terminated, truncated, info = self._env.step(
+                new_state, action
+            )
+            total_reward += float(reward)
+            if terminated or truncated:
+                break
+
+        if self.clip_reward:
+            total_reward = float(np.sign(total_reward))
+
+        # Detect objects in the last frame
+        frame = self._get_frame(pixel_obs)
+        flat = self._detections_to_flat_obs(frame)
+
+        # Retrieve or initialise the current obs stack
+        if hasattr(state, "_dino_obs_stack"):
+            current_stack = state._dino_obs_stack
+        else:
+            current_stack = np.zeros(self._obs_shape, dtype=np.float32)
+
+        obs_stack = np.concatenate(
+            [current_stack[1:], flat[np.newaxis]], axis=0
+        )
+
+        # Stash the stack on the state object for the next call.
+        # We attach it as a plain Python attribute so it survives across steps
+        # without polluting JAX pytree tracing (the inner state is unchanged).
+        try:
+            new_state._dino_obs_stack = obs_stack
+        except AttributeError:
+            # The state is a frozen dataclass / struct – wrap it in a thin
+            # container that carries the extra field alongside the original.
+            new_state = _DinoStateWrapper(new_state, obs_stack)
+
+        return jnp.array(obs_stack), new_state, total_reward, terminated, truncated, info
+
+
+class _DinoStateWrapper:
+    """
+    Thin mutable wrapper that carries a DINOv2 obs stack alongside an
+    immutable inner environment state (e.g. a Flax ``struct.dataclass``).
+
+    This is only created when the inner state object does not support
+    arbitrary attribute assignment.
+    """
+
+    def __init__(self, inner_state: Any, obs_stack: np.ndarray):
+        self._inner_state = inner_state
+        self._dino_obs_stack = obs_stack
+
+    # Proxy all attribute access to the inner state so the rest of the code
+    # (e.g. LogWrapper, FlattenObservationWrapper) sees the real env state.
+    def __getattr__(self, name: str):
+        return getattr(self._inner_state, name)
+
+    def __repr__(self) -> str:
+        return f"_DinoStateWrapper({self._inner_state!r})"
 
 
 @functools.partial(jax.jit, static_argnames=('sigma',))
