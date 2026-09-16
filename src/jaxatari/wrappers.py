@@ -346,42 +346,71 @@ class ObjectCentricWrapper(JaxatariWrapper):
         info_dict = {k: reduce_info(k, v) for k, v in infos.items()}
         return obs_stack, oc_state, reward, terminated, truncated, info_dict
 
-class YOLOObjectCentricWrapper:
+@struct.dataclass
+class YOLOObjectCentricState:
+    atari_state: AtariState
+    obs_stack: jax.Array
+    last_frame: jax.Array
+    last_results: Any  # ultralytics results object
+
+
+class YOLOObjectCentricWrapper(JaxatariWrapper):
+    """
+    Wrapper for Atari environments that returns stacked object-centric observations
+    derived from a YOLO detector run on rendered frames, instead of ground-truth
+    game state. NOTE: unlike ObjectCentricWrapper/PixelObsWrapper, this wrapper is
+    intentionally NOT jax.jit-compiled — it calls out to OpenCV and a PyTorch/
+    ultralytics model per step, neither of which is traceable by JAX. Apply this
+    wrapper directly after AtariWrapper.
+    """
+
     def __init__(self, env, yolo_model_path, class_map, num_features,
                  frame_stack_size=4, frame_skip=4, conf_threshold=0.40,
-                 imgsz=640, iou_threshold=0.50, display_size=(480, 630)):
-        self._env = env
+                 imgsz=640, iou_threshold=0.50, display_size=None,
+                 clip_reward=True, autoreset=True):
+        super().__init__(env)
+        assert isinstance(env, AtariWrapper), "YOLOObjectCentricWrapper must be applied directly after AtariWrapper"
         self.frame_stack_size = frame_stack_size
         self.frame_skip = frame_skip
         self.num_features = num_features
         self.conf_threshold = conf_threshold
         self.imgsz = imgsz
         self.iou_threshold = iou_threshold
-        self.display_size = display_size
+        self.display_size = display_size  # None = keep native 160x210; set a tuple to match your training resolution
         self.class_map = class_map
+        self.clip_reward = clip_reward
+        self.autoreset = autoreset
         self.device = 0 if torch.cuda.is_available() else "cpu"
 
         self.model = YOLO(yolo_model_path)
         self.model.to(self.device)
 
-        self._obs_stack = None
-        self.last_frame = None     # BGR, upscaled — for display
-        self.last_results = None   # raw ultralytics result — for draw_boxes()
+        self.last_frame = None
+        self.last_results = None
 
-    # def _prep_frame(self, pixel_obs_last):
-    #     frame_rgb = np.array(pixel_obs_last)
-    #     frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-    #     return cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+        self._observation_space = spaces.Box(
+            low=-np.inf, high=np.inf,
+            shape=(self.frame_stack_size, self.num_features),
+            dtype=jnp.float32,
+        )
+
+    def observation_space(self) -> spaces.Box:
+        return self._observation_space
+
+    def _prep_frame(self, env_state):
+        frame_rgb = np.array(self._env.render(env_state))
+        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+        if self.display_size is not None:
+            frame_bgr = cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+        return frame_bgr
 
     def _detections_to_flat_obs(self, frame_bgr):
         results = self.model.predict(frame_bgr, imgsz=self.imgsz, conf=self.conf_threshold,
-                                    iou=self.iou_threshold, device=self.device, verbose=False)[0]
-        self.last_results = results
+                                      iou=self.iou_threshold, device=self.device, verbose=False)[0]
 
         flat = np.zeros(self.num_features, dtype=np.float32)
-        instance_counts = {cls: 0 for cls in self.class_map}  # reset each frame
+        instance_counts = {cls: 0 for cls in self.class_map}
 
-        # Sort by confidence so the highest-confidence detections claim slots first
         boxes = sorted(results.boxes, key=lambda b: float(b.conf.item()), reverse=True)
 
         for box in boxes:
@@ -393,7 +422,7 @@ class YOLOObjectCentricWrapper:
             slot_start, slot_size, max_instances = self.class_map[cls]
             idx = instance_counts[cls]
             if idx >= max_instances:
-                continue  # no free slot left for this class this frame
+                continue
 
             offset = slot_start + idx * slot_size
             x1, y1, x2, y2 = box.xyxy[0].tolist()
@@ -402,28 +431,55 @@ class YOLOObjectCentricWrapper:
             flat[offset:offset + min(slot_size, 5)] = [x, y, w, h, 1.0]
             instance_counts[cls] += 1
 
-        return flat
+        return flat, results
 
-    def _prep_frame(self, image_stack):
-        frame_rgb = np.array(image_stack[-1])
-        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        return cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+    def reset(self, key: chex.PRNGKey):
+        _, atari_state = self._env.reset(key)
+        last_frame = self._prep_frame(atari_state.env_state)
+        flat, last_results = self._detections_to_flat_obs(last_frame)
 
-    def reset(self, key):
-        pixel_obs, state = self._env.reset(key)
-        image_stack, _object_obs = pixel_obs          # unpack the tuple
-        self.last_frame = self._prep_frame(image_stack)
-        flat = self._detections_to_flat_obs(self.last_frame)
-        self._obs_stack = np.stack([flat] * self.frame_stack_size)
-        return jnp.array(self._obs_stack), state
+        obs_stack_np = np.stack([flat] * self.frame_stack_size)
+        obs_stack = jnp.array(obs_stack_np)
 
-    def step(self, state, action):
-        pixel_obs, new_state, reward, terminated, truncated, info = self._env.step(state, action)
-        image_stack, _object_obs = pixel_obs          # unpack the tuple
-        self.last_frame = self._prep_frame(image_stack)
-        flat = self._detections_to_flat_obs(self.last_frame)
-        self._obs_stack = np.concatenate([self._obs_stack[1:], flat[np.newaxis]], axis=0)
-        return jnp.array(self._obs_stack), new_state, reward, terminated, truncated, info
+        state = YOLOObjectCentricState(atari_state, obs_stack, last_frame, last_results)
+
+        self.last_frame = last_frame
+        self.last_results = last_results
+
+        return obs_stack, state
+
+    def step(self, state: YOLOObjectCentricState, action: int):
+        atari_state = state.atari_state
+        total_reward = 0.0
+        terminated = False
+        truncated = False
+        info = {}
+
+        for _ in range(self.frame_skip):
+            _, atari_state, reward, terminated, truncated, info = self._env.step(atari_state, action)
+            total_reward += float(reward)
+            if terminated or truncated:
+                break
+
+        if self.clip_reward:
+            total_reward = float(np.sign(total_reward))
+
+        if self.autoreset and (bool(info.get("env_done", terminated)) or truncated):
+            obs_stack, new_state = self.reset(atari_state.key)
+            return obs_stack, new_state, total_reward, terminated, truncated, info
+
+        last_frame = self._prep_frame(atari_state.env_state)
+        flat, last_results = self._detections_to_flat_obs(last_frame)
+
+        obs_stack_np = np.concatenate([np.array(state.obs_stack)[1:], flat[np.newaxis]], axis=0)
+        obs_stack = jnp.array(obs_stack_np)
+
+        new_state = YOLOObjectCentricState(atari_state, obs_stack, last_frame, last_results)
+
+        self.last_frame = last_frame
+        self.last_results = last_results
+
+        return obs_stack, new_state, total_reward, terminated, truncated, info
 
 class DinoV2ObjectCentricWrapper:
     """
