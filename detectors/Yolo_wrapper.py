@@ -35,14 +35,15 @@ wrapped_env = YOLOObjectCentricWrapper(
     autoreset=True,
 )
 
+
 class_colours = {
-    0: (0, 255, 0),        # green  — player
-    1: (0, 0, 255),        # red    — enemy
-    2: (255, 165, 0),      # orange — projectile
-    3: (0, 215, 255),      # gold   — collectible
-    4: (219, 55, 170),     # purple — structure
-    5: (180, 180, 180),    # gray   — neutral
-    6: (255, 255, 255),    # white  — enemy projectile
+    0: (0,   255,   0),    # green   — player
+    1: (255,   0,   0),    # red     — enemy
+    2: (0, 165,   255),    # light blue  — projectile
+    3: (255,   215, 0),    # gold    — collectible
+    4: (170, 55,  219),    # purple    — structure
+    5: (180, 180, 180),    # gray    — neutral
+    6: (255, 255, 255)     # white   — enemy_projectile
 }
 
 def draw_boxes(frame_rgb, result):
