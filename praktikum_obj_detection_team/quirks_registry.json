@@ -1129,16 +1129,8 @@
             },
             "enemies": {
                 "class_id": 1,
-                "detected_type": "entity",
-                "x_offset": 0,
-                "y_offset": -160,
-                "grid_origin_x": null,
-                "grid_origin_y": null,
-                "cell_w": null,
-                "cell_h": null,
-                "grid_cols": null,
-                "active_value": null,
-                "_raw_shape": null
+                "detected_type": "static_entity",
+                "static_boxes": []
             },
             "items": {
                 "class_id": 3,
@@ -2140,7 +2132,7 @@
     "slotmachine": {
         "objects": {
             "reel_symbols": {
-                "class_id": "REVIEW",
+                "class_id": 1,
                 "detected_type": "true_2d_grid",
                 "x_offset": null,
                 "y_offset": null,
@@ -2226,7 +2218,7 @@
                 "_raw_shape": null
             },
             "barricade_health": {
-                "class_id": "4",
+                "class_id": 4,
                 "detected_type": "unknown_array",
                 "x_offset": null,
                 "y_offset": null,
