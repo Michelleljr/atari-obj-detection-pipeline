@@ -9,13 +9,12 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 1000
-DEBUG_MODE     = False
+TARGET_FRAMES  = 100
+DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
-#TARGET_GAMES  = ["phoenix", "mspacman"]
-TARGET_GAMES = ["phoenix"]
+TARGET_GAMES = ["hauntedhouse"]
 
 # Atari screen dimensions
 SCREEN_W = 160.0
@@ -125,7 +124,6 @@ def extract_true_2d_grid(obj_data, entry):
     try:
         grid = obj_data[0]
 
-        # 🟢 1. The Transpose Fix: Flip the mangled RAM matrix back to reality
         if entry.get("transpose_grid"):
             grid = grid.T
 
@@ -135,7 +133,6 @@ def extract_true_2d_grid(obj_data, entry):
         cw = entry.get("cell_w") or (SCREEN_W / cols)
         ch = entry.get("cell_h") or (SCREEN_H / rows)
 
-        # Separate the jump distance from the box width
         step_x = entry.get("step_x") or cw
         step_y = entry.get("step_y") or ch
 
@@ -160,7 +157,6 @@ def extract_true_2d_grid(obj_data, entry):
                         is_active = True
 
                 if is_active:
-                    # 🟢 Draw the box at the Step coordinate, using the Cell size
                     boxes.append((ox + (c * step_x), oy + (r * step_y), cw, ch))
         return boxes
     except Exception:
@@ -226,11 +222,49 @@ def extract_flat_per_row(obj_data, entry):
 
     return boxes
 
+def classify_hauntedhouse_enemy(crop_rgb):
+    """
+    Inspects cropped sprite pixels to determine enemy type by color.
+    Returns: 'ghost', 'bat', 'spider', or 'unknown'
+    """
+    if crop_rgb.size == 0:
+        return 'unknown'
+
+    # 1. Spider / Tarantula (Green / Yellow-Green OR Orange / Yellow-Orange)
+    # Green check: High Green, lower Red & Blue
+    green_pixels = np.sum((crop_rgb[:, :, 1] > 140) & (crop_rgb[:, :, 2] < 120))
+    # Orange / Yellow check: High Red & High Green, Low Blue
+    orange_pixels = np.sum((crop_rgb[:, :, 0] > 150) &
+                           (crop_rgb[:, :, 1] > 100) &
+                           (crop_rgb[:, :, 2] < 80))
+
+    if green_pixels > 4 or orange_pixels > 4:
+        return 'spider'
+
+    # 2. Bat (Crimson Red: High Red, Low Green & Blue)
+    red_pixels = np.sum((crop_rgb[:, :, 0] > 140) &
+                        (crop_rgb[:, :, 1] < 80) &
+                        (crop_rgb[:, :, 2] < 80))
+    if red_pixels > 5:
+        return 'bat'
+
+    # 3. Ghost (Off-white / Cyan / Gray: High RGB across all 3 channels)
+    white_pixels = np.sum((crop_rgb[:, :, 0] > 150) &
+                          (crop_rgb[:, :, 1] > 150) &
+                          (crop_rgb[:, :, 2] > 150))
+    if white_pixels > 6:
+        return 'ghost'
+
+    return 'spider' if (green_pixels + orange_pixels) > 0 else 'ghost'
+
+
 def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
     """
     Handles hardcoded computer vision workarounds for games where
     JAXAtari has missing or incomplete RAM mappings.
     """
+    detected_enemy_type = None  # FIX: Always initialize at function start
+
     if game_name == "enduro":
         y_min, y_max = 140, 155
         car_strip = pixels[y_min:y_max, :, :]
@@ -242,16 +276,15 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
             car_w = int(np.max(x_coords) - car_x)
             car_h = y_max - y_min
 
-            # Map directly to class 0 (Player)
             patch_h, patch_w = pixels.shape[:2]
             yolo_lines.append(to_yolo(0, car_x, y_min, car_w, car_h, patch_h, patch_w))
 
             if DEBUG_MODE:
                 draw_debug_box(frame_bgr, car_x, y_min, car_w, car_h,
                                0, "entity", "player_car")
+
     elif game_name == "mspacman":
         patch_h, patch_w = pixels.shape[:2]
-        # ----------------------------------------mspacman detection-----------------------------------------------------
         player_color = np.array([210, 164, 74])
         lower_p = np.clip(player_color - 25, 0, 255)
         upper_p = np.clip(player_color + 25, 0, 255)
@@ -265,7 +298,6 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
                 if DEBUG_MODE:
                     draw_debug_box(frame_bgr, x, y, w, h, 0, "entity", "player_cv")
 
-        #----------------------------------------pellet detection -----------------------------------------------------
         palette_colors = [
             np.array([210, 164, 116]),
             np.array([228, 111, 111]),
@@ -276,7 +308,6 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
         combined_pellet_mask = np.zeros(pixels.shape[:2], dtype=np.uint8)
 
         for color in palette_colors:
-            # We can keep the tolerance tight (15) because your color is exactly right!
             lower = np.clip(color - 15, 0, 255)
             upper = np.clip(color + 15, 0, 255)
             mask = cv2.inRange(pixels, lower, upper)
@@ -295,7 +326,6 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
     elif game_name == "phoenix":
         patch_h, patch_w = pixels.shape[:2]
 
-        #-----------------------------shield-------------------------------------------------
         lower_s = np.array([200, 200, 200])
         upper_s = np.array([255, 255, 255])
         s_mask = cv2.inRange(pixels, lower_s, upper_s)
@@ -308,19 +338,49 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
                 if DEBUG_MODE:
                     draw_debug_box(frame_bgr, x, y, w, h, 4, "entity", "shield_cv")
 
-        #---------------------enemy_projectile--------------------------------------------------
-        ep_lower = np.array([200, 200, 200])
-        ep_upper = np.array([255, 255, 255])
-        ep_mask = cv2.inRange(pixels, ep_lower, ep_upper)
-
-        ep_contours, _ = cv2.findContours(ep_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        ep_contours, _ = cv2.findContours(s_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for cnt in ep_contours:
             x, y, w, h = cv2.boundingRect(cnt)
-
             if w <= 4 and 3 <= h <= 15 and y > 25:
-                yolo_lines.append(to_yolo(6, x, y, w, h, patch_h, patch_w))
+                pad = 2
+                px = max(0, x - pad)
+                py = max(0, y - pad)
+                pw = w + (pad * 2)
+                ph = h + (pad * 2)
+
+                yolo_lines.append(to_yolo(6, px, py, pw, ph, patch_h, patch_w))
                 if DEBUG_MODE:
-                    draw_debug_box(frame_bgr, x, y, w, h, 6, "entity", "enemy_proj_cv")
+                    draw_debug_box(frame_bgr, px, py, pw, ph, 6, "entity", "enemy_proj_cv")
+
+    elif game_name == "hauntedhouse":
+        patch_h, patch_w = pixels.shape[:2]
+
+        hsv = cv2.cvtColor(pixels, cv2.COLOR_RGB2HSV)
+        blue_mask = cv2.inRange(hsv, np.array([100, 100, 100]), np.array([140, 255, 255]))
+        black_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([15, 15, 15]))
+
+        ignore_mask = cv2.bitwise_or(blue_mask, black_mask)
+        fg_mask = cv2.bitwise_not(ignore_mask)
+        fg_mask[140:, :] = 0  # Black out HUD
+
+        contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for cnt in contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            if 5 <= w <= 25 and 6 <= h <= 30:
+                if not (w <= 12 and h <= 10 and x > 110):
+                    sprite_crop = pixels[y:y + h, x:x + w]
+                    enemy_type = classify_hauntedhouse_enemy(sprite_crop)
+                    detected_enemy_type = enemy_type
+
+                    yolo_lines.append(to_yolo(1, x, y, w, h, patch_h, patch_w))
+
+                    if DEBUG_MODE:
+                        draw_debug_box(frame_bgr, x, y, w, h, 1, "entity", "enemies_cv")
+
+    return detected_enemy_type
+
 
 def to_yolo(class_id, x, y, w, h, actual_h, actual_w):
     xc = min((x + w / 2.0) / actual_w, 1.0)
@@ -334,7 +394,6 @@ def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
     border_color = TYPE_BORDER.get(obj_type, (255, 255, 255))
     x1, y1, x2, y2 = int(x), int(y), int(x + w), int(y + h)
 
-    # Outer border encodes storage type (entity=magenta, grid=cyan)
     cv2.rectangle(frame, (x1 - 1, y1 - 1), (x2 + 1, y2 + 1), border_color, 1)
     cv2.rectangle(frame, (x1, y1), (x2, y2), fill_color, 1)
 
@@ -343,7 +402,6 @@ def draw_debug_box(frame, x, y, w, h, class_id, obj_type, obj_name):
         label = f"{class_name} | {obj_name}"
         cv2.putText(frame, label, (x1, max(y1 - 4, 8)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.25, fill_color, 1, cv2.LINE_AA)
-
 
 
 games_to_run = list(QUIRKS_REGISTRY.keys()) if RUN_ALL_GAMES else TARGET_GAMES
@@ -366,7 +424,6 @@ for game_name in games_to_run:
 
     objects_cfg = QUIRKS_REGISTRY[game_name].get("objects", {})
 
-    # Only extract objects that have been fully assigned
     active_cfg = {
         name: entry for name, entry in objects_cfg.items()
         if isinstance(entry.get("class_id"), int)
@@ -382,7 +439,6 @@ for game_name in games_to_run:
 
     obj_summary = [f"{n}(cls={e['class_id']})" for n, e in active_cfg.items()]
     print(f"  Extracting {len(active_cfg)} objects: {obj_summary}")
-
 
     base_dir = "quirks_debug" if DEBUG_MODE else "dataset"
     output_folder = f"{base_dir}/{game_name}"
@@ -401,6 +457,13 @@ for game_name in games_to_run:
         saved_count       = 0
         MAX_IDLE_FRAMES   = 3000
         frames_since_save = 0
+        TOTAL_ENEMY_QUOTA = TARGET_FRAMES // 2
+        EMPTY_QUOTA       = TARGET_FRAMES - TOTAL_ENEMY_QUOTA
+        MIN_PER_ID        = int(TARGET_FRAMES * 0.10)
+
+        enemy_id_counts   = {'ghost': 0, 'bat': 0, 'spider': 0}
+        enemy_saved_total = 0
+        empty_saved_total = 0
 
         while saved_count < TARGET_FRAMES and frames_since_save < MAX_IDLE_FRAMES:
             rng, action_key, chance_key = jax.random.split(rng, 3)
@@ -415,6 +478,10 @@ for game_name in games_to_run:
             current_obs, state, reward, stopped, truncated, info = env.step(state, action)
             frame_count       += 1
             frames_since_save += 1
+
+            if game_name == "hauntedhouse" and frame_count % 100 == 0:
+                rng, reset_key = jax.random.split(rng)
+                current_obs, state = env.reset(reset_key)
 
             if frame_count % 20 == 0:
                 image_stack, obs_stack = current_obs
@@ -432,11 +499,9 @@ for game_name in games_to_run:
                     class_id = entry["class_id"]
                     obj_type = entry.get("detected_type", "entity")
 
-                    # Handle static entities directly from JSON without checking RAM
                     if obj_type == "static_entity":
                         boxes = entry.get("static_boxes") or []
                     else:
-                        # Dynamic entities must exist in RAM
                         obj_data = objects_dict.get(obj_name)
                         if obj_data is None:
                             continue
@@ -455,24 +520,67 @@ for game_name in games_to_run:
                             continue
 
                     for (x, y, w, h) in boxes:
+                        if w < 8:
+                            pad_x = (8 - w) // 2
+                            x = max(0, x - pad_x)
+                            w = 8
+                        if h < 8:
+                            pad_y = (8 - h) // 2
+                            y = max(0, y - pad_y)
+                            h = 8
+
                         yolo_lines.append(to_yolo(class_id, x, y, w, h, actual_h, actual_w))
                         if DEBUG_MODE:
                             draw_debug_box(frame_bgr, x, y, w, h,
                                            class_id, obj_type, obj_name)
 
-                apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr)
+                # FIX: Called only ONCE and store returned string safely
+                detected_enemy_type = apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr)
 
                 if yolo_lines:
+                    has_enemy = any(line.startswith("1 ") for line in yolo_lines)
+
+                    if game_name == "hauntedhouse":
+                        if has_enemy:
+                            if enemy_saved_total >= TOTAL_ENEMY_QUOTA:
+                                continue
+
+                            e_type = detected_enemy_type or 'ghost'
+
+                            if e_type not in enemy_id_counts:
+                                enemy_id_counts[e_type] = 0
+
+                            other_types_needed = sum(
+                                max(0, MIN_PER_ID - enemy_id_counts.get(t, 0))
+                                for t in ['ghost', 'bat', 'spider'] if t != e_type
+                            )
+                            enemy_budget_left = TOTAL_ENEMY_QUOTA - enemy_saved_total
+
+                            if frames_since_save < 1500:
+                                if enemy_budget_left <= other_types_needed and enemy_id_counts[e_type] >= MIN_PER_ID:
+                                    continue
+
+                            enemy_id_counts[e_type] += 1
+                            enemy_saved_total += 1
+
+                        else:
+                            if empty_saved_total >= EMPTY_QUOTA:
+                                continue
+                            empty_saved_total += 1
+
                     base = f"{output_folder}/frame_{saved_count:05d}"
                     with open(f"{base}.txt", "w") as f:
                         f.write("\n".join(yolo_lines))
-                        # Upscale by 4x to fix sprites of 1x1
                         frame_bgr = cv2.resize(frame_bgr, (640, 840), interpolation=cv2.INTER_NEAREST)
                         cv2.imwrite(f"{base}.png", frame_bgr)
                     saved_count       += 1
                     frames_since_save  = 0
-                    print(f"  [{saved_count:>4}/{TARGET_FRAMES}] "
-                          f"{len(yolo_lines)} annotations saved")
+
+                    if game_name == "hauntedhouse":
+                        tag = f"ENEMY ({detected_enemy_type})" if has_enemy else "EMPTY"
+                        print(f"  [{saved_count:>4}/{TARGET_FRAMES}] Saved ({tag:<14s}) | "
+                              f"Breakdown: {enemy_id_counts} | Empty: {empty_saved_total}/{EMPTY_QUOTA}")
+
                 else:
                     print(f"  [frame {frame_count}] no visible objects — skipping")
 
