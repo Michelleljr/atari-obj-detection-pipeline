@@ -9,8 +9,8 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 100
-DEBUG_MODE     = True
+TARGET_FRAMES  = 1000
+DEBUG_MODE     = False
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
@@ -230,7 +230,7 @@ def classify_hauntedhouse_enemy(crop_rgb):
     if crop_rgb.size == 0:
         return 'unknown'
 
-    # 1. Spider / Tarantula (Green / Yellow-Green OR Orange / Yellow-Orange)
+    # Spider / Tarantula (Green / Yellow-Green OR Orange / Yellow-Orange)
     # Green check: High Green, lower Red & Blue
     green_pixels = np.sum((crop_rgb[:, :, 1] > 140) & (crop_rgb[:, :, 2] < 120))
     # Orange / Yellow check: High Red & High Green, Low Blue
@@ -241,14 +241,14 @@ def classify_hauntedhouse_enemy(crop_rgb):
     if green_pixels > 4 or orange_pixels > 4:
         return 'spider'
 
-    # 2. Bat (Crimson Red: High Red, Low Green & Blue)
+    # Bat (Crimson Red: High Red, Low Green & Blue)
     red_pixels = np.sum((crop_rgb[:, :, 0] > 140) &
                         (crop_rgb[:, :, 1] < 80) &
                         (crop_rgb[:, :, 2] < 80))
     if red_pixels > 5:
         return 'bat'
 
-    # 3. Ghost (Off-white / Cyan / Gray: High RGB across all 3 channels)
+    # Ghost (Off-white / Cyan / Gray: High RGB across all 3 channels)
     white_pixels = np.sum((crop_rgb[:, :, 0] > 150) &
                           (crop_rgb[:, :, 1] > 150) &
                           (crop_rgb[:, :, 2] > 150))
@@ -355,6 +355,7 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
     elif game_name == "hauntedhouse":
         patch_h, patch_w = pixels.shape[:2]
 
+        # Handle Enemy CV Detection (Ghost, Bat, Spider)
         hsv = cv2.cvtColor(pixels, cv2.COLOR_RGB2HSV)
         blue_mask = cv2.inRange(hsv, np.array([100, 100, 100]), np.array([140, 255, 255]))
         black_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([15, 15, 15]))

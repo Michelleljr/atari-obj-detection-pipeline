@@ -1117,7 +1117,7 @@
             "player": {
                 "class_id": 0,
                 "detected_type": "entity",
-                "x_offset": 0,
+                "x_offset": -2,
                 "y_offset": -130,
                 "grid_origin_x": null,
                 "grid_origin_y": null,
@@ -1125,7 +1125,9 @@
                 "cell_h": null,
                 "grid_cols": null,
                 "active_value": null,
-                "_raw_shape": null
+                "_raw_shape": null,
+                "w_padding": 4,
+                "h_padding": 4
             },
             "enemies": {
                 "class_id": 1,
