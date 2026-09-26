@@ -9,7 +9,7 @@ import pygame
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REGISTRY_PATH = SCRIPT_DIR.parent / "praktikum_obj_detection_team" / "quirks_registry.json"
-game_name = "montezumarevenge"
+game_name = "phoenix"
 YOLO_MODEL_PATH = SCRIPT_DIR.parent / "detectors" / "YOLOv8nano" / "weights" / f"{game_name}.pt"
 
 def load_registry(path):
@@ -27,8 +27,8 @@ wrapped_env = YOLOObjectCentricWrapper(
     game_name=game_name,
     frame_stack_size=4,
     frame_skip=4,
-    conf_threshold=0.40,
-    imgsz=640,
+    conf_threshold=0.15 if game_name == "hauntedhouse" else 0.40,
+    imgsz=320 if game_name == "hauntedhouse" else 640,
     iou_threshold=0.50,
     display_size=(480, 640),
     clip_reward=True,
@@ -59,6 +59,10 @@ def draw_boxes(frame_rgb, result):
         cls_id = int(box.cls.item())
         conf = float(box.conf.item())
         x1, y1, x2, y2 = map(int,box.xyxy[0].tolist())
+
+        if game_name == "hauntedhouse" and y1 >= 405:
+            continue
+
         colour = class_colours.get(cls_id,(0, 255, 0))
 
         # YOLO's class name
