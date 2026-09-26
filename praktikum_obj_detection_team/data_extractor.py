@@ -355,30 +355,63 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
     elif game_name == "hauntedhouse":
         patch_h, patch_w = pixels.shape[:2]
 
-        # Handle Enemy CV Detection (Ghost, Bat, Spider)
+        #Clear any RAM player lines
+        yolo_lines[:] = [line for line in yolo_lines if not line.startswith("0 ")]
+
+        #Extract Foreground (ignore room blue and room black, AND black out HUD y >= 140)
         hsv = cv2.cvtColor(pixels, cv2.COLOR_RGB2HSV)
         blue_mask = cv2.inRange(hsv, np.array([100, 100, 100]), np.array([140, 255, 255]))
         black_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([15, 15, 15]))
 
         ignore_mask = cv2.bitwise_or(blue_mask, black_mask)
         fg_mask = cv2.bitwise_not(ignore_mask)
-        fg_mask[140:, :] = 0  # Black out HUD
+        fg_mask[
+            135:, :] = 0
 
+        # 3. Detect Enemy Contours First
         contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        enemy_boxes_mask = np.zeros((patch_h, patch_w), dtype=np.uint8)
 
         for cnt in contours:
             x, y, w, h = cv2.boundingRect(cnt)
-
+            # Filter valid enemy sprites (Ghost, Bat, Spider)
             if 5 <= w <= 25 and 6 <= h <= 30:
-                if not (w <= 12 and h <= 10 and x > 110):
+                if not (w <= 12 and h <= 10 and x > 110):  # skip static room artifact
                     sprite_crop = pixels[y:y + h, x:x + w]
-                    enemy_type = classify_hauntedhouse_enemy(sprite_crop)
-                    detected_enemy_type = enemy_type
+                    detected_enemy_type = classify_hauntedhouse_enemy(sprite_crop)
 
                     yolo_lines.append(to_yolo(1, x, y, w, h, patch_h, patch_w))
+                    # Mark enemy region so white ghost pixels don't bleed into player eye calculation
+                    enemy_boxes_mask[y:y + h, x:x + w] = 255
 
                     if DEBUG_MODE:
                         draw_debug_box(frame_bgr, x, y, w, h, 1, "entity", "enemies_cv")
+
+        #Detect Player Eyes (Excluding HUD and active Enemy areas)
+        white_mask = cv2.inRange(pixels, np.array([200, 200, 200]), np.array([255, 255, 255]))
+        white_mask[135:, :] = 0
+        white_mask[enemy_boxes_mask > 0] = 0
+
+        y_indices, x_indices = np.where(white_mask > 0)
+
+        if len(x_indices) >= 4:
+            x_min, x_max = int(np.min(x_indices)), int(np.max(x_indices))
+            y_min, y_max = int(np.min(y_indices)), int(np.max(y_indices))
+
+            ew = (x_max - x_min) + 1
+            eh = (y_max - y_min) + 1
+
+            if 4 <= ew <= 18 and 3 <= eh <= 12:
+                pad = 2
+                px = max(0, x_min - pad)
+                py = max(0, y_min - pad)
+                pw = ew + (pad * 2)
+                ph = eh + (pad * 2)
+
+                yolo_lines.append(to_yolo(0, px, py, pw, ph, patch_h, patch_w))
+
+                if DEBUG_MODE:
+                    draw_debug_box(frame_bgr, px, py, pw, ph, 0, "entity", "player_eyes_cv")
 
     return detected_enemy_type
 
