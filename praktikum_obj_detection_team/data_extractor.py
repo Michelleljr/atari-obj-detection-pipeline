@@ -16,15 +16,15 @@ from extractor_utils import (
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 20
-DEBUG_MODE     = True
-DEBUG_LABELS   = False #false = hide text
+TARGET_FRAMES  = 1000
+DEBUG_MODE     = False
+DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES  = False
-TARGET_GAMES   = ["mspacman"]
+TARGET_GAMES   = ["mspacman","namethisgame","pong"]
 
 # =============================================================================
-#  GLOBAL CLASS MAP & COLOR DEFS
+#  GLOBAL CLASS MAP & COLORS
 # =============================================================================
 
 GLOBAL_CLASSES = {

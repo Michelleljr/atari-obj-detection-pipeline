@@ -48,7 +48,17 @@ def patch_mspacman(pixels, yolo_lines, frame_bgr, to_yolo, draw_debug_box, debug
         if 4 <= w <= 16 and 4 <= h <= 16 and y < 176:
             yolo_lines.append(to_yolo(0, x, y, w, h, patch_h, patch_w))
             if debug_mode:
-                draw_debug_box(frame_bgr, x, y, w, h, 0, "entity", "player_cv")
+                pad_x = 2
+                pad_y = 3
+
+                px = max(0, x - pad_x)
+                py = max(0, y - pad_y)
+                pw = min(patch_w - px, w + (pad_x * 2))
+                ph = min(patch_h - py, h + (pad_y * 2))
+
+                yolo_lines.append(to_yolo(0, px, py, pw, ph, patch_h, patch_w))
+                if debug_mode:
+                    draw_debug_box(frame_bgr, px, py, pw, ph, 0, "entity", "player_cv")
 
     # Extract Pellets
     palette_colors = [
