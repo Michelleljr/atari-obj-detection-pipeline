@@ -18,8 +18,8 @@ from ultralytics import YOLO
 import torch
 import jax
 
-CURRENT_GAME = "frostbite"
-mode = "manual"  # switch between already captured frames detections and live game detections [static/live/manual]
+CURRENT_GAME = "hauntedhouse"
+mode = "live"  # switch between already captured frames detections and live game detections [static/live/manual]
 
 UNIVERSAL_NAMES = {
     0: "player", 1: "enemy", 2: "projectile", 3: "collectible",
@@ -68,21 +68,33 @@ model.to(device)
 print("Model loaded\n")
 
 
-def draw_boxes(frame_bgr, result):
-    """Draw RT-DETR boxes on a BGR frame and return it."""
-    img = frame_bgr.copy()
+def draw_boxes(display_bgr, result, scale_factor=3.0):
+    """Draw boxes on upscaled display window while running inference on native resolution."""
+    img = display_bgr.copy()
     if result.boxes is None or len(result.boxes) == 0:
         return img
 
     for box in result.boxes:
         cls_id = int(box.cls.item())
-        conf = float(box.conf.item())
-        x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+        conf_val = float(box.conf.item())
+
+        # Native resolution coordinates (160x210)
+        x1_nat, y1_nat, x2_nat, y2_nat = box.xyxy[0].tolist()
+
+        # Filter bottom HUD false positives (y >= 135 on native frame)
+        if CURRENT_GAME == "hauntedhouse" and y1_nat >= 135:
+            continue
+
+        # Scale coordinates up by 3x to match display size (480x630)
+        x1 = int(x1_nat * scale_factor)
+        y1 = int(y1_nat * scale_factor)
+        x2 = int(x2_nat * scale_factor)
+        y2 = int(y2_nat * scale_factor)
 
         colour = class_colours.get(cls_id, (255, 255, 255))
-        label = f"{class_names.get(cls_id, str(cls_id))} {conf:.2f}"
+        label = f"{class_names.get(cls_id, str(cls_id))} {conf_val:.2f}"
 
-        cv2.rectangle(img, (x1, y1), (x2, y2), colour, 1)
+        cv2.rectangle(img, (x1, y1), (x2, y2), colour, 2)
         (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.4, 1)
         cv2.rectangle(img, (x1, y1 - th - 4), (x1 + tw, y1), colour, -1)
         cv2.putText(img, label, (x1, y1 - 3),
@@ -143,14 +155,12 @@ elif mode == "live":
         display = cv2.resize(frame_bgr, (480, 630), interpolation=cv2.INTER_NEAREST)
 
         if frame_count % infer_frames == 0:
-            # results = model.predict(frame_bgr, imgsz=img_size,
-            #                         conf=conf, iou=iou_threshold,
-            #                         device=device, verbose=False)
-            # Draw on the upscaled version by re-running on display frame
-            results_big = model.predict(display, imgsz=img_size,
-                                        conf=conf, iou=iou_threshold,
-                                        device=device, verbose=False)
-            last_annotated = draw_boxes(display, results_big[0])
+            # Run prediction on native 160x210 frame
+            results = model.predict(frame_bgr, imgsz=320,
+                                    conf=conf, iou=iou_threshold,
+                                    device=device, verbose=False)
+            # Draw scaled boxes on display window
+            last_annotated = draw_boxes(display, results[0], scale_factor=3.0)
 
         my_window_name = " YOLOv8 Inference"
 
@@ -217,10 +227,12 @@ elif mode == "manual":
         display = cv2.resize(frame_bgr, (480, 630), interpolation=cv2.INTER_NEAREST)
 
         if frame_count % infer_frames == 0:
-            results_big = model.predict(display, imgsz=img_size,
-                                        conf=conf, iou=iou_threshold,
-                                        device=device, verbose=False)
-            last_annotated = draw_boxes(display, results_big[0])
+            # Run prediction on native 160x210 frame
+            results = model.predict(frame_bgr, imgsz=320,
+                                    conf=conf, iou=iou_threshold,
+                                    device=device, verbose=False)
+            # Draw scaled boxes on display window
+            last_annotated = draw_boxes(display, results[0], scale_factor=3.0)
 
         if last_annotated is not None:
             cv2.imshow(my_window_name, last_annotated)

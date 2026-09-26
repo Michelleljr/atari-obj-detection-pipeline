@@ -9,8 +9,8 @@ from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 REGISTRY_PATH = "quirks_registry.json"
 
-TARGET_FRAMES  = 1000
-DEBUG_MODE     = False
+TARGET_FRAMES  = 100
+DEBUG_MODE     = True
 DEBUG_LABELS   = True #false = hide text
 
 RUN_ALL_GAMES      = False
@@ -355,45 +355,29 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
     elif game_name == "hauntedhouse":
         patch_h, patch_w = pixels.shape[:2]
 
-        #Clear any RAM player lines
         yolo_lines[:] = [line for line in yolo_lines if not line.startswith("0 ")]
 
-        #Extract Foreground (ignore room blue and room black, AND black out HUD y >= 140)
-        hsv = cv2.cvtColor(pixels, cv2.COLOR_RGB2HSV)
-        blue_mask = cv2.inRange(hsv, np.array([100, 100, 100]), np.array([140, 255, 255]))
-        black_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([15, 15, 15]))
+        # Check if the room background is currently white (lightning/flash effect)
+        # Check average brightness of top corners
+        top_left_bg = pixels[5:20, 5:20]
+        is_white_bg = np.mean(top_left_bg) > 200
 
-        ignore_mask = cv2.bitwise_or(blue_mask, black_mask)
-        fg_mask = cv2.bitwise_not(ignore_mask)
-        fg_mask[
-            135:, :] = 0
+        claimed_mask = np.zeros((patch_h, patch_w), dtype=np.uint8)
+        claimed_mask[135:, :] = 255  # Lock out bottom HUD completely
 
-        # 3. Detect Enemy Contours First
-        contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        enemy_boxes_mask = np.zeros((patch_h, patch_w), dtype=np.uint8)
+        #PLAYER EYES EXTRACTION
+        if not is_white_bg:
+            # Normal dark/blue room -> Eyes are WHITE pixels
+            white_mask = cv2.inRange(pixels, np.array([200, 200, 200]), np.array([255, 255, 255]))
+            white_mask[135:, :] = 0
+            y_indices, x_indices = np.where(white_mask > 0)
+        else:
+            # Flash/White room -> Eyes invert to BLACK pixels
+            black_eye_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([30, 30, 30]))
+            black_eye_mask[135:, :] = 0
+            y_indices, x_indices = np.where(black_eye_mask > 0)
 
-        for cnt in contours:
-            x, y, w, h = cv2.boundingRect(cnt)
-            # Filter valid enemy sprites (Ghost, Bat, Spider)
-            if 5 <= w <= 25 and 6 <= h <= 30:
-                if not (w <= 12 and h <= 10 and x > 110):  # skip static room artifact
-                    sprite_crop = pixels[y:y + h, x:x + w]
-                    detected_enemy_type = classify_hauntedhouse_enemy(sprite_crop)
-
-                    yolo_lines.append(to_yolo(1, x, y, w, h, patch_h, patch_w))
-                    # Mark enemy region so white ghost pixels don't bleed into player eye calculation
-                    enemy_boxes_mask[y:y + h, x:x + w] = 255
-
-                    if DEBUG_MODE:
-                        draw_debug_box(frame_bgr, x, y, w, h, 1, "entity", "enemies_cv")
-
-        #Detect Player Eyes (Excluding HUD and active Enemy areas)
-        white_mask = cv2.inRange(pixels, np.array([200, 200, 200]), np.array([255, 255, 255]))
-        white_mask[135:, :] = 0
-        white_mask[enemy_boxes_mask > 0] = 0
-
-        y_indices, x_indices = np.where(white_mask > 0)
-
+        # Look for small eye clusters
         if len(x_indices) >= 4:
             x_min, x_max = int(np.min(x_indices)), int(np.max(x_indices))
             y_min, y_max = int(np.min(y_indices)), int(np.max(y_indices))
@@ -409,10 +393,41 @@ def apply_custom_game_patches(game_name, pixels, yolo_lines, frame_bgr):
                 ph = eh + (pad * 2)
 
                 yolo_lines.append(to_yolo(0, px, py, pw, ph, patch_h, patch_w))
+                claimed_mask[py:py + ph, px:px + pw] = 255
 
                 if DEBUG_MODE:
                     draw_debug_box(frame_bgr, px, py, pw, ph, 0, "entity", "player_eyes_cv")
 
+        hsv = cv2.cvtColor(pixels, cv2.COLOR_RGB2HSV)
+
+        if not is_white_bg:
+            # Normal room: ignore blue walls and black background
+            blue_mask = cv2.inRange(hsv, np.array([100, 100, 100]), np.array([140, 255, 255]))
+            black_mask = cv2.inRange(pixels, np.array([0, 0, 0]), np.array([15, 15, 15]))
+            ignore_mask = cv2.bitwise_or(blue_mask, black_mask)
+            fg_mask = cv2.bitwise_not(ignore_mask)
+        else:
+            # White room: ignore white walls (RGB > 200)
+            white_wall_mask = cv2.inRange(pixels, np.array([200, 200, 200]), np.array([255, 255, 255]))
+            fg_mask = cv2.bitwise_not(white_wall_mask)
+
+        # Subtract claimed region (HUD + Player eyes)
+        fg_mask[claimed_mask > 0] = 0
+
+        contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        for cnt in contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            if 5 <= w <= 25 and 6 <= h <= 30:
+                if not (w <= 12 and h <= 10 and x > 110):  # Skip static room artifact
+                    sprite_crop = pixels[y:y + h, x:x + w]
+                    detected_enemy_type = classify_hauntedhouse_enemy(sprite_crop)
+
+                    yolo_lines.append(to_yolo(1, x, y, w, h, patch_h, patch_w))
+
+                    if DEBUG_MODE:
+                        draw_debug_box(frame_bgr, x, y, w, h, 1, "entity", "enemies_cv")
     return detected_enemy_type
 
 
