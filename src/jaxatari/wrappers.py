@@ -8,15 +8,19 @@ from typing import Any, Dict, Tuple, Union, Optional, Callable
 from dataclasses import is_dataclass, asdict
 
 import chex
+import cv2
 from flax import struct
 import jax
 import jax.image as jim
 import jax.numpy as jnp
 from jax import flatten_util
+import torch
 from jaxatari.environment import EnvState, JAXAtariAction as Action
 import jaxatari.spaces as spaces
 import numpy as np
 from jaxatari.rendering.jax_rendering_utils import RendererConfig
+
+from ultralytics import YOLO
 
 class JaxatariWrapper(object):
     """Base class for JAXAtark wrappers."""
@@ -342,6 +346,185 @@ class ObjectCentricWrapper(JaxatariWrapper):
         info_dict = {k: reduce_info(k, v) for k, v in infos.items()}
         return obs_stack, oc_state, reward, terminated, truncated, info_dict
 
+@struct.dataclass
+class YOLOObjectCentricState:
+    atari_state: AtariState
+    obs_stack: jax.Array
+    last_frame: jax.Array
+    last_results: Any  
+
+class YOLOObjectCentricWrapper(JaxatariWrapper):
+    """
+    YOLO-based object-centric observation wrapper. Relies on pre-trained YOLO models for object detection,
+    and a quirk registry to map detected objects to a structured observation space.
+    Applies this wrapper after the AtariWrapper!
+    """
+
+    def __init__(self, env, yolo_model_path, quirks_registry, game_name,
+                frame_stack_size=4, frame_skip=4, conf_threshold=0.40,
+                imgsz=640, iou_threshold=0.50, display_size=None,
+                clip_reward=True, autoreset=True):
+        super().__init__(env)
+        assert isinstance(env, AtariWrapper), "YOLOObjectCentricWrapper must be applied directly after AtariWrapper"
+
+        self.frame_stack_size = frame_stack_size
+        self.frame_skip = frame_skip
+        self.conf_threshold = conf_threshold
+        self.imgsz = imgsz
+        self.iou_threshold = iou_threshold
+        self.display_size = display_size
+        self.clip_reward = clip_reward
+        self.autoreset = autoreset
+
+        if game_name not in quirks_registry:
+            raise KeyError(f"Game '{game_name}' not found in quirks registry.")
+
+        self.game_name = game_name
+        self.registry = quirks_registry[game_name]
+        self.objects = self.registry["objects"]
+
+        # Build layout directly from the registry
+        self.class_offsets = {}
+        self.class_names = {}
+        self.class_slot_sizes = {}
+
+        offset = 0
+        objects = sorted(self.objects.items(), key=lambda item: item[1]["class_id"])
+
+        for name, spec in objects:
+            class_id = spec.get("class_id")
+
+            if not isinstance(class_id, int):
+                continue
+
+            raw_shape = spec.get("_raw_shape")
+            slot_size = int(np.prod(raw_shape)) if raw_shape is not None else 5
+
+            self.class_offsets[class_id] = offset
+            self.class_names[class_id] = name
+            self.class_slot_sizes[class_id] = slot_size
+
+            offset += slot_size
+
+        self.num_features = offset
+
+        if self.num_features == 0:
+            raise ValueError(f"No YOLO-compatible entity objects found for game '{game_name}'.")
+
+        self.device = 0 if torch.cuda.is_available() else "cpu"
+        self.model = YOLO(yolo_model_path)
+        self.model.to(self.device)
+
+        self.last_frame = None
+        self.last_results = None
+
+        self._observation_space = spaces.Box(
+            low=-np.inf, high=np.inf,
+            shape=(self.frame_stack_size, self.num_features),
+            dtype=jnp.float32,
+        )
+
+    def observation_space(self) -> spaces.Box:
+        return self._observation_space
+
+    def _prep_frame(self, env_state):
+        frame_rgb = np.array(self._env.render(env_state))
+        frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
+
+        if self.display_size is not None:
+            frame_bgr = cv2.resize(frame_bgr, self.display_size, interpolation=cv2.INTER_NEAREST)
+
+        return frame_bgr
+
+    def _detections_to_flat_obs(self, frame_bgr):
+        '''
+        Converts YOLO detections to a flattened observation array
+        '''
+        # Get the YOLO detections for the current frame
+        results = self.model.predict(
+            frame_bgr,
+            imgsz=self.imgsz,
+            conf=self.conf_threshold,
+            iou=self.iou_threshold,
+            device=self.device,
+            verbose=False,
+        )[0]
+
+        flat = np.zeros(self.num_features, dtype=np.float32)
+        boxes = sorted(results.boxes, key=lambda b: float(b.conf.item()), reverse=True) #sort by confidence
+        filled_classes = set()
+
+        for box in boxes:
+            cls = int(box.cls.item())
+            conf = float(box.conf.item())
+
+            if (conf < self.conf_threshold) or (cls not in self.class_offsets) or (cls in filled_classes):
+                continue
+
+            filled_classes.add(cls)
+            offset = self.class_offsets[cls]
+            slot_size = self.class_slot_sizes[cls]
+
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+            x, y = (x1 + x2) / 2.0, (y1 + y2) / 2.0
+            w, h = x2 - x1, y2 - y1
+
+            values = np.array([x, y, w, h, 1.0], dtype=np.float32)
+            n = min(slot_size, len(values))
+            flat[offset:offset + n] = values[:n]
+
+        return flat, results
+
+    def reset(self, key: chex.PRNGKey
+              ) -> Tuple[chex.Array, YOLOObjectCentricState]:
+        _, atari_state = self._env.reset(key)
+
+        last_frame = self._prep_frame(atari_state.env_state)
+        flat, last_results = self._detections_to_flat_obs(last_frame)
+
+        obs_stack_np = np.stack([flat] * self.frame_stack_size)
+        obs_stack = jnp.array(obs_stack_np)
+
+        state = YOLOObjectCentricState(atari_state, obs_stack, last_frame, last_results)
+
+        self.last_frame = last_frame
+        self.last_results = last_results
+
+        return obs_stack, state
+
+    def step(self, state: YOLOObjectCentricState, action: int
+             ) -> Tuple[chex.Array, YOLOObjectCentricState, float, bool, bool, Dict[Any, Any]]:
+        atari_state = state.atari_state
+        total_reward = 0.0
+        terminated = False
+        truncated = False
+        info = {}
+
+        for _ in range(self.frame_skip):
+            _, atari_state, reward, terminated, truncated, info = self._env.step(atari_state, action)
+            total_reward += float(reward)
+            if terminated or truncated:
+                break
+
+        if self.clip_reward:
+            total_reward = float(np.sign(total_reward))
+
+        if self.autoreset and (bool(info.get("env_done", terminated)) or truncated):
+            obs_stack, new_state = self.reset(atari_state.key)
+            return obs_stack, new_state, total_reward, terminated, truncated, info
+
+        last_frame = self._prep_frame(atari_state.env_state)
+        flat, last_results = self._detections_to_flat_obs(last_frame)
+
+        obs_stack_np = np.concatenate([np.array(state.obs_stack)[1:], flat[np.newaxis]], axis=0)
+        obs_stack = jnp.array(obs_stack_np)
+
+        new_state = YOLOObjectCentricState(atari_state, obs_stack, last_frame, last_results)
+
+        self.last_frame = last_frame
+        self.last_results = last_results
+
+        return obs_stack, new_state, total_reward, terminated, truncated, info
 
 @functools.partial(jax.jit, static_argnames=('sigma',))
 def _gaussian_blur_2d_nchw(image: chex.Array, sigma: float = 3.0) -> chex.Array:
