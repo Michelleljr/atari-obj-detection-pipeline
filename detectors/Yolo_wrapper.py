@@ -6,10 +6,11 @@ import jaxatari
 from jaxatari.wrappers import AtariWrapper, YOLOObjectCentricWrapper
 from pathlib import Path
 import pygame
+import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REGISTRY_PATH = SCRIPT_DIR.parent / "praktikum_obj_detection_team" / "quirks_registry.json"
-game_name = "phoenix"
+game_name = "kingkong"
 YOLO_MODEL_PATH = SCRIPT_DIR.parent / "detectors" / "YOLOv8nano" / "weights" / f"{game_name}.pt"
 
 def load_registry(path):
@@ -119,6 +120,8 @@ while running:
     elif keys[pygame.K_SPACE]:
         action_val = 1  # FIRE
 
+    prev_raw_frame = None
+
     if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
         running = False
 
@@ -128,18 +131,26 @@ while running:
 
     # Render Annotated Frame to Pygame Display
     if wrapped_env.last_frame is not None:
-        #Draw YOLO boxes on raw frame array THEN convert
-        annotated_rgb = draw_boxes(wrapped_env.last_frame, wrapped_env.last_results)
+        current_frame = wrapped_env.last_frame
 
-        #Transpose (H, W, C) -> (W, H, C) for Pygame memory layout
+        # Max-pool consecutive frames
+        if prev_raw_frame is not None and prev_raw_frame.shape == current_frame.shape:
+            pooled_frame = np.maximum(current_frame, prev_raw_frame)
+        else:
+            pooled_frame = current_frame
+
+        prev_raw_frame = current_frame.copy()
+
+        # Pass the pooled frame into box drawing function
+        annotated_rgb = draw_boxes(pooled_frame, wrapped_env.last_results)
+
         pygame_ready_array = jnp.transpose(annotated_rgb, (1, 0, 2))
-
         surf = pygame.surfarray.make_surface(pygame_ready_array)
         scaled_surf = pygame.transform.scale(surf, (DISPLAY_WIDTH, DISPLAY_HEIGHT))
         screen.blit(scaled_surf, (0, 0))
 
     pygame.display.flip()
-    clock.tick(60)  # Lock execution to smooth 60 FPS
+    clock.tick(60)
 
     if terminated or truncated:
         print("Game Over! Resetting environment...")
