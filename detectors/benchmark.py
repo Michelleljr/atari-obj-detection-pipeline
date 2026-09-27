@@ -1,57 +1,104 @@
-import torch
-from ultralytics import YOLO, RTDETR
+import time
+import json
 from pathlib import Path
+import jax
+import jax.numpy as jnp
+import jaxatari
+import numpy as np
+from jaxatari.wrappers import AtariWrapper, YOLOObjectCentricWrapper
 
-script_dir = Path(__file__).parent
+# --- Paths Setup ---
+SCRIPT_DIR = Path(__file__).resolve().parent
+REGISTRY_PATH = SCRIPT_DIR.parent / "praktikum_obj_detection_team" / "quirks_registry.json"
+WEIGHTS_DIR = SCRIPT_DIR.parent / "detectors" / "YOLOv8nano" / "weights"
 
-yolo_path = script_dir / "YOLOv8nano" / "weights" / "pong_YOLObest.pt"
-rtdetr_path = script_dir / "RT-DETR" / "yolo26n"
-yaml_path = script_dir / "RT-DETR" / "dataset.yaml"
-
-print("loading in models to be compared")
-yolo = YOLO(str(yolo_path))
-rtdetr = RTDETR(str(rtdetr_path))
-
-if torch.cuda.is_available():
-    print("warming up GPU")
-    yolo.model.to("cuda")
-    rtdetr.model.to("cuda")
-
-    dummy_input = torch.zeros((1, 3, 640, 640), device="cuda")
-
-    for _ in range(20):
-        _ = yolo.model(dummy_input)
-        _ = rtdetr.model(dummy_input)
-
-print("running yolo val")
-yolo_metrics = yolo.val(data = str(yaml_path), verbose = False)
-
-print("running rtdetr val")
-rtdetr_metrics = rtdetr.val(data = str(yaml_path), verbose = False)
-
-yoloMap50 = yolo_metrics.box.map50
-rtdetrMap50 = rtdetr_metrics.box.map50
-
-yoloMap5095 = yolo_metrics.box.map
-rtdetrMap5095 = rtdetr_metrics.box.map
-
-yoloInferSpeed = yolo_metrics.speed['inference']
-rtdetrInferSpeed = rtdetr_metrics.speed['inference']
-
-#enforce FPS rule in report
-yolo_fps = 1000.0 / yoloInferSpeed if yoloInferSpeed > 0 else 0.0
-rtdetr_fps = 1000.0 / rtdetrInferSpeed if rtdetrInferSpeed > 0 else 0.0
-
-yolo_budget_pass = "PASS" if yoloInferSpeed <= 16.66 else "FAIL (TOO SLOW)"
-rtdetr_budget_pass = "PASS" if rtdetrInferSpeed <= 16.66 else "FAIL (TOO SLOW)"
+TARGET_GAMES = ["pong", "mspacman", "spaceinvaders"]
 
 
-#construct tables
-print("\n" + "="*50)
-print(f"{'METRIC':<20} | {'YOLOv8 Nano':<12} | {'RT-DETR':<12}")
-print(f"{'mAP 50':<20} | {yoloMap50:<12.4f} | {rtdetrMap50:<12.4f}")
-print(f"{'mAP 50-95':<20} | {yoloMap5095:<12.4f} | {rtdetrMap5095:<12.4f}")
-print(f"{'inference Speed':<20} | {yoloInferSpeed:<12.4f} | {rtdetrInferSpeed:<12.4f}")
-print(f"{'Derived Throughput':<25} | {f'{yolo_fps:.2f} FPS':<15} | {f'{rtdetr_fps:.2f} FPS':<15}")
-print(f"{'16.66ms RL Budget':<25} | {yolo_budget_pass:<15} | {rtdetr_budget_pass:<15}")
-print("="*75)
+def load_registry(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+registry = load_registry(REGISTRY_PATH)
+
+
+def evaluate_local_wrapper_latency(game_name, num_steps=500):
+    """Measures pure runtime execution overhead inside YOLOObjectCentricWrapper."""
+    model_path = WEIGHTS_DIR / f"{game_name}.pt"
+    if not model_path.exists():
+        print(f"[SKIP] Weight file missing for '{game_name}' at: {model_path}")
+        return None
+
+    base_env = jaxatari.make(game_name)
+    atari_env = AtariWrapper(base_env)
+
+    wrapped_env = YOLOObjectCentricWrapper(
+        env=atari_env,
+        yolo_model_path=model_path,
+        quirks_registry=registry,
+        game_name=game_name,
+        frame_stack_size=4,
+        frame_skip=4,
+        conf_threshold=0.40,  # Operational threshold
+        imgsz=640,
+        iou_threshold=0.50,
+        autoreset=True,
+    )
+
+    rng = jax.random.PRNGKey(42)
+    rng, reset_key = jax.random.split(rng)
+    obs_stack, state = wrapped_env.reset(reset_key)
+
+    full_step_latencies = []
+    num_actions = int(wrapped_env.action_space().n)
+
+    # Warm-up step
+    rng, action_key = jax.random.split(rng)
+    action_val = jax.random.randint(action_key, shape=(), minval=0, maxval=num_actions)
+    action = jnp.array(action_val, dtype=jnp.int32)
+    obs_stack, state, reward, terminated, truncated, info = wrapped_env.step(state, action)
+
+    wall_clock_start = time.perf_counter()
+
+    for _ in range(num_steps):
+        rng, action_key = jax.random.split(rng)
+        action_val = jax.random.randint(action_key, shape=(), minval=0, maxval=num_actions)
+        action = jnp.array(action_val, dtype=jnp.int32)
+
+        # Time total end-to-end wrapper step execution
+        t0 = time.perf_counter()
+        obs_stack, state, reward, terminated, truncated, info = wrapped_env.step(state, action)
+        t1 = time.perf_counter()
+
+        full_step_latencies.append((t1 - t0) * 1000.0)
+
+    total_wall_time = time.perf_counter() - wall_clock_start
+    avg_step_latency = float(np.mean(full_step_latencies))
+    effective_fps = (num_steps * wrapped_env.frame_skip) / total_wall_time
+
+    return {
+        "game": game_name,
+        "wrapper_step_ms": avg_step_latency,
+        "fps": effective_fps,
+        "frame_skip": wrapped_env.frame_skip
+    }
+
+
+if __name__ == "__main__":
+    results = []
+    print("\n" + "=" * 65)
+    print(" BENCHMARKING END-TO-END WRAPPER SYSTEM OVERHEAD ")
+    print("=" * 65)
+
+    for game in TARGET_GAMES:
+        res = evaluate_local_wrapper_latency(game, num_steps=500)
+        if res:
+            results.append(res)
+
+    print("\n" + "=" * 65)
+    print(f"{'Target Game':<16} | {'Wrapper Step (ms)':<18} | {'Throughput (FPS)':<16} | {'Frame Skip (k)':<12}")
+    print("-" * 65)
+    for r in results:
+        print(f"{r['game']:<16} | {r['wrapper_step_ms']:<18.2f} | {r['fps']:<16.2f} | {r['frame_skip']:<12}")
+    print("=" * 65)
