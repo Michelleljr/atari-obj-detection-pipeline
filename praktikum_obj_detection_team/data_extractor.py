@@ -18,10 +18,10 @@ REGISTRY_PATH = "quirks_registry.json"
 
 TARGET_FRAMES  = 1000
 DEBUG_MODE     = False
-DEBUG_LABELS   = True #false = hide text
+DEBUG_LABELS   = False #false = hide text
 
 RUN_ALL_GAMES  = False
-TARGET_GAMES   = ["mspacman","namethisgame","pong"]
+TARGET_GAMES   = ["spaceinvaders"]
 
 # =============================================================================
 #  GLOBAL CLASS MAP & COLORS
@@ -198,19 +198,19 @@ for game_name in games_to_run:
                             continue
 
                     for (x, y, w, h) in boxes:
-                        if w < 8:
+                        if entry.get("cell_w") is None and w < 8:
                             pad_x = (8 - w) // 2
                             x = max(0, x - pad_x)
                             w = 8
-                        if h < 8:
+
+                        if entry.get("cell_h") is None and h < 8:
                             pad_y = (8 - h) // 2
                             y = max(0, y - pad_y)
                             h = 8
 
                         yolo_lines.append(to_yolo(class_id, x, y, w, h, actual_h, actual_w))
                         if DEBUG_MODE:
-                            draw_debug_box(frame_bgr, x, y, w, h,
-                                           class_id, obj_type, obj_name)
+                            draw_debug_box(frame_bgr, x, y, w, h, class_id, obj_type, obj_name)
 
                 # Custom Game Patch Routing
                 detected_enemy_type = None
