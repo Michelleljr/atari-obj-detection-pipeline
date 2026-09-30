@@ -20,7 +20,7 @@ import jaxatari
 from jaxatari.wrappers import PixelAndObjectObsWrapper, AtariWrapper
 
 
-CURRENT_GAME = "frostbite"
+CURRENT_GAME = "venture"
 mode = "live"
 
 UNIVERSAL_NAMES = {
@@ -35,7 +35,7 @@ UNIVERSAL_COLOURS = {
 }
 
 script_dir = Path(__file__).parent
-yolo_path = script_dir / "YOLOv8nano" / "weights" / f"{CURRENT_GAME}_YOLObest.pt"
+yolo_path = script_dir / "YOLOv8nano" / "weights" / f"{CURRENT_GAME}.pt"
 #rtdetr_path = script_dir.parent / "RT-DETR" / "yolo26n"  # Adjust placeholder path
 
 conf = 0.40
